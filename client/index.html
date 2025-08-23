@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/styles/global.css">
+  <link rel="stylesheet" href="assets/styles/home.css">
+  <title>E'TREALOUEST</title>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="nav-left menu-toggle" id="menu-toggle">MEMU</div>
+      <div class="nav-center">
+        <a href="#home"><img class="nav-brand-logo" src="assets/images/brand_logo.png" alt="Logo" aria-label="開啟購物車"
+            aria-haspopup="dialog" aria-live="polite"></a>
+      </div>
+      <div class="nav-right">
+        <a href="#cart">CART</a>
+        <div class="cart-badge" id="cartBadge" aria-label="購物車商品數">0</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="overlay-menu" id="overlay-menu">
+    <div class="close-btn" id="close-btn">✕</div>
+    <ul class="menu">
+
+      <!-- SHOP 主選單 -->
+      <li class="menu-item">
+        <div class="shop-toggle" id="shop-toggle">SHOP</div>
+        <ul class="shop-items submenu">
+          <li class="shop-item"><a href="#products">25SS</a></li>
+          <li class="shop-item"><a href="#">24SS</a></li>
+        </ul>
+      </li>
+
+      <!-- 其他主選單 -->
+      <li class="menu-item"><a href="#contact">LOCATION</a></li>
+      <li class="menu-item"><a href="#catalog">LOOKBOOK</a></li>
+    </ul>
+  </div>
+
+  <main id="app"><!-- 這裡會動態載入其他頁面 --></main>
+  <footer>
+    <div class="links">
+      <a href="mailto:etrealouestinfo@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      <a href="https://www.instagram.com/e.trealouest_official?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+        target="_blank"><i class="fa-brands fa-square-instagram"></i></a>
+    </div>
+    <p class="copyright">COPYRIGHT © ETREALOUEST</p>
+  </footer>
+
+  <script src="./assets/scripts/cart-badge.js"></script>
+  <script src="./assets/scripts/menu.js"></script>
+  <script src="main.js"></script>
+  <script src="https://kit.fontawesome.com/361f927d81.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
