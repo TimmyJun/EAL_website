@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./assets/styles/global.css">
   <link rel="stylesheet" href="./assets/styles/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
   <title>E'TREALOUEST</title>
 </head>
 
@@ -18,7 +22,8 @@
             aria-haspopup="dialog" aria-live="polite"></a>
       </div>
       <div class="nav-right">
-        <a href="#cart">CART</a>
+        <!-- <a href="">CART</a> -->
+        <button id="cartToggleBtn" type="button" aria-haspopup="dialog" aria-controls="cartPanel">CART</button>
         <div class="cart-badge" id="cartBadge" aria-label="購物車商品數">0</div>
       </div>
     </nav>
@@ -44,6 +49,25 @@
   </div>
 
   <main id="app"><!-- 這裡會動態載入其他頁面 --></main>
+  <!-- Slideout overlay -->
+  <div id="cartOverlay" class="cart-overlay" aria-hidden="true"></div>
+
+  <!-- Slideout panel -->
+  <aside id="cartPanel" class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle"
+    aria-hidden="true" tabindex="-1">
+    <header class="cart-panel-header">
+      <button id="cartCloseBtn" class="icon-btn" aria-label="Close Cart">✕</button>
+      <h2>Your cart</h2>
+    </header>
+    <div id="cartItems" class="cart-panel-items" aria-live="polite"></div>
+    <footer class="cart-panel-footer">
+      <div class="cart-panel-summary">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">$0.00</strong>
+      </div>
+      <button id="checkoutBtn" class="primary-btn">Checkout</button>
+    </footer>
+  </aside>
   <footer>
     <div class="links">
       <a href="mailto:etrealouestinfo@gmail.com"><i class="fa-solid fa-envelope"></i></a>
@@ -53,7 +77,10 @@
     <p class="copyright">COPYRIGHT © ETREALOUEST</p>
   </footer>
 
+  <script src="./assets/scripts/cart-store.js"></script>
   <script src="./assets/scripts/cart-badge.js"></script>
+  <script src="./assets/scripts/product-service.mock.js"></script>
+  <script src="./assets/scripts/cart-slideout-panel.js"></script>
   <script src="./assets/scripts/menu.js"></script>
   <script src="main.js"></script>
   <script src="https://kit.fontawesome.com/361f927d81.js" crossorigin="anonymous"></script>
