@@ -112,6 +112,14 @@
     return clamp(toInt(input?.value, QTY_MIN), QTY_MIN, QTY_MAX);
   }
 
+  function getActiveVariant(root) {
+    const colorEl = root.querySelector('.color-btn.color-active');
+    const sizeEl = root.querySelector('.size-option.size-active');
+    const color = colorEl?.dataset.color || colorEl?.textContent?.trim() || '-';
+    const size = sizeEl?.dataset.size || sizeEl?.textContent?.trim() || '-';
+    return { color, size };
+  }
+
   // ===== 主流程 =====
   function initProductPage() {
     const pageRoot = $(SEL.pageRoot) || document; // 允許沒加 .product-page 也能跑
@@ -159,10 +167,10 @@
           console.warn('找不到 productId，請在 .add-to-cart 加 data-id 或在頁面根節點加 data-product-id');
           return;
         }
-        // 由 global-cart.js 提供
-        addToCart(id, qty);
-        // 可選：顯示一個輕提示
-        showToast('已加入購物車');
+        const variant = getActiveVariant(pageRoot);
+        // ✅ 改用含變體的 API
+        window.addToCartVariant?.(id, variant, qty);
+        showToast?.('已加入購物車');
       });
     }
   }

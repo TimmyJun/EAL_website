@@ -50,7 +50,7 @@ document.querySelectorAll('a[href="#cart"]').forEach(a => a.addEventListener('cl
 
 // 渲染（以 cartStore 為準）
 async function renderCartAsync() {
-  const entries = window.cartStore?.entries() || []; // [{id, qty}]
+  const entries = window.cartStore?.entries() || []; // [{key, id, color, size, qty}]
   if (!entries.length) {
     cartItemsEl.innerHTML = `<p style="text-align: center;">Your cart is empty now</p>`;
     cartSubtotalEl.textContent = fmtMoney(0);
@@ -59,7 +59,7 @@ async function renderCartAsync() {
 
   // 先畫骨架
   cartItemsEl.innerHTML = entries.map(e => `
-    <div class="cart-item" data-id="${e.id}">
+    <div class="cart-item" data-key="${e.key}">
       <div class="cart-item__thumb skeleton"></div>
       <div>
         <p class="cart-item__title skeleton">&nbsp;</p>
@@ -80,20 +80,24 @@ async function renderCartAsync() {
   const metaMap = await window.productService.fetchByIds(ids); // { id: {title, price, image, currency} }
 
   let subtotal = 0;
-  cartItemsEl.innerHTML = entries.map(({ id, qty }) => {
+  cartItemsEl.innerHTML = entries.map(({ key, id, color, size, qty }) => {
     const m = metaMap[id] || {};
     const title = m.title || id;
     const price = Number(m.price) || 0;
-    const image = m.image || '';
+    const image = m.image || '';       // 若未來有沒色圖片，可在這裡依 color 切換
     const currency = m.currency || 'TWD';
     subtotal += price * qty;
+    const img = (m.images && m.images[color]) || m.image || '';
+
+    const metaText = [color !== '-' ? color : null, size !== '-' ? size : null]
+      .filter(Boolean).join(' / ');
 
     return `
-      <div class="cart-item" data-id="${id}">
-        <img class="cart-item__thumb" src="${image}" alt="">
+      <div class="cart-item" data-key="${key}">
+        <img class="cart-item__thumb" src="${img}" alt="">
         <div>
-          <p class="cart-item__title">${title}</p>
-          <p class="cart-item__meta">${fmtMoney(price, currency)} × ${qty}</p>
+          <p class="cart-item__title">${escapeHTML(title)}</p>
+          <p class="cart-item__meta">${escapeHTML(metaText)} ${metaText ? ' · ' : ''}${fmtMoney(price, currency)} × ${qty}</p>
           <div class="qty-control">
             <button class="qty-btn" data-action="dec" aria-label="Decrease quantity">-</button>
             <span aria-live="polite">${qty}</span>
@@ -111,13 +115,13 @@ async function renderCartAsync() {
 
 // 事件代理：寫回 store（透過 cart:updated → 讓面板/徽章都更新）
 cartItemsEl?.addEventListener('click', (e) => {
-  const btn = e.target.closest('.qty-btn'); if (!btn) return;
-  const id = e.target.closest('.cart-item')?.dataset.id; if (!id) return;
-  const action = btn.dataset.action;
-  if (action === 'inc') window.cartStore?.inc(id, 1);
-  if (action === 'dec') window.cartStore?.inc(id, -1);
-  if (action === 'remove') window.cartStore?.remove(id);
-});
+  const btn = e.target.closest('.qty-btn'); if (!btn) return
+  const key = e.target.closest('.cart-item')?.dataset.key; if (!key) return
+  const action = btn.dataset.action
+  if (action === 'inc') window.cartStore?.incByKey(key, 1)
+  if (action === 'dec') window.cartStore?.incByKey(key, -1)
+  if (action === 'remove') window.cartStore?.removeByKey(key)
+})
 
 // 同步更新（面板開著才重繪）
 window.addEventListener('cart:updated', () => {

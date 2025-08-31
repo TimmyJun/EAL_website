@@ -4,8 +4,12 @@
     "groupId": "",
     "title": "Tight Fit Tee",
     "price": 1680,
-    "image": "assets/images/25ss_white.jpg",
     "currency": "TWD",
+    "image": "assets/images/25ss_white.jpg",
+    "images": {
+      "white": "assets/images/25ss_white.jpg",
+      "black": "assets/images/25ss_black.jpg"
+    },
     "inStock": true
   }
 ]
