@@ -1,0 +1,38 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Logs / coverage
+logs/
+*.log
+coverage/
+.nyc_output/
+
+# Build outputs
+dist/
+build/
+
+# Prisma
+generated/
+.prisma/
+node_modules/.prisma/
+
+# Misc
+*.local
+tmp/
+.vercel

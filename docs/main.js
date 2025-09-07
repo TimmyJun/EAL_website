@@ -1,75 +1,71 @@
-const app = document.getElementById('app')
+const app = document.getElementById('app');
 
 const pageInitMap = {
   home: "initScrollObserver",
   product: "initProductPage",
+  products: "initProductsPage",
 };
 
-function loadPage(page) {
+// 解析 hash -> { page: 'product', query: 'id=xxx' }
+function parseHash() {
+  const raw = (location.hash || '').slice(1);   // '#product?id=xxx' -> 'product?id=xxx'
+  const [page, query = ''] = raw.split('?');
+  return { page: page || 'home', query };
+}
+
+function loadPage(page /* 只放純頁名 */) {
+  // 這裡千萬別帶上 ?id=...
   fetch(`pages/${page}.html`)
     .then(res => res.text())
     .then(html => {
-      app.innerHTML = html
-      loadCSS(page)
-      loadScript(page)
-      window.scrollTo(0, 0)
-    })
+      app.innerHTML = html;
+      loadCSS(page);
+      loadScript(page);
+      window.scrollTo(0, 0);
+    });
 }
 
-function loadCSS(page) {
-  const linkId = "page-style"
-  let link = document.getElementById(linkId)
+function loadCSS(page /* 純頁名 */) {
+  const linkId = "page-style";
+  let link = document.getElementById(linkId);
+  if (link) link.remove();
 
-  //移除舊的樣式
-  if (link) {
-    link.remove()
-  }
-
-  //建立新的<link>
-  link = document.createElement('link')
-  link.id = linkId
-  link.rel = "stylesheet"
-  link.href = `assets/styles/${page}.css` // 對應 home.css、products.css 等
-
-  document.head.append(link)
+  link = document.createElement('link');
+  link.id = linkId;
+  link.rel = "stylesheet";
+  link.href = `assets/styles/${page}.css`; // ✅ 只用純頁名
+  document.head.append(link);
 }
 
-function loadScript(page) {
+function loadScript(page /* 純頁名 */) {
   const scriptId = "page-script";
-  let oldScript = document.getElementById(scriptId)
-  if (oldScript) oldScript.remove(); // 移除舊的
+  let oldScript = document.getElementById(scriptId);
+  if (oldScript) oldScript.remove();
 
-  const script = document.createElement("script")
-  script.src = `assets/scripts/${page}.js`
-  script.id = scriptId
+  const script = document.createElement("script");
+  script.src = `assets/scripts/${page}.js`;    // ✅ 只用純頁名
+  script.id = scriptId;
 
-  //等 JS 載入完再初始化 scroll observer
   script.onload = () => {
-    const initFunctionName = pageInitMap[page]
+    const initFunctionName = pageInitMap[page];
     if (typeof window[initFunctionName] === "function") {
-      window[initFunctionName]()
+      window[initFunctionName]();               // product.js 內部自己用 hash 抓 id
     }
-  }
+  };
 
-  document.body.appendChild(script)
+  document.body.appendChild(script);
 }
 
 function closeMenu() {
-  document.getElementById("menu-toggle")?.classList.remove("open")
-  document.getElementById("overlay-menu")?.classList.remove("open")
+  document.getElementById("menu-toggle")?.classList.remove("open");
+  document.getElementById("overlay-menu")?.classList.remove("open");
 }
 
 function handleRoute() {
-  const hash = location.hash.slice(1) // #home -> home
-  const page = hash || "home"
-  loadPage(page)
-
-  // 關閉選單
-  closeMenu()
+  const { page } = parseHash(); // ✅ 只取純頁名
+  loadPage(page);
+  closeMenu();
 }
 
-//初次載入
-window.addEventListener("load", handleRoute)
-
-//切換 hash 時觸發
-window.addEventListener("hashchange", handleRoute)
+window.addEventListener("load", handleRoute);
+window.addEventListener("hashchange", handleRoute);
