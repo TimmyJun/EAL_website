@@ -7,15 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Season {
+  SS //Spring + Summer
+  FW // Fall + Winter
+}
+
 model Product {
   id        String   @id @default(cuid())
   title     String
   price     Int      @default(0)   // 先給預設值，讓既有資料能過
   description String?  @db.Text
+
+  year  Int
+  season Season
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   variants  Variant[]
+
+  @@index([year, season])
 }
 
 

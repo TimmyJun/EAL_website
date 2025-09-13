@@ -19,6 +19,21 @@ async function fetchProductById(id) {
   return res.json();
 }
 
+async function fetchProductsBy({ year, type } = {}) {
+  const url = new URL(api('/api/products'), window.location.origin);
+  if (year) url.searchParams.set('year', String(year));
+  if (type) url.searchParams.set('type', String(type)); // 'ss' | 'fw'
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
+  return res.json();
+}
+
+async function fetchSeasonTags() {
+  const res = await fetch(api('/api/products/collections/season-tags'), { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Fetch season tags failed: ${res.status}`);
+  return res.json();
+}
+
 (function () {
   // 用現有的 fetchProductById 逐一取回，組成 side cart 需要的顯示資料
   async function fetchByIds(ids = []) {
@@ -55,5 +70,9 @@ async function fetchProductById(id) {
   }
 
   // 供 cart-slideout-panel 呼叫：window.productService.fetchByIds(ids)
-  window.productService = { fetchByIds };
+  window.productService = { 
+    fetchByIds,
+    fetchProductsBy,
+    fetchSeasonTags
+  }
 }) ();
