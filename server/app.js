@@ -36,14 +36,14 @@ app.use(express.json());
 
 app.use('/api/products', productRoutes);
 
-app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
 
 app.get('/', (req, res) => {
   res.send('✅ Express server is running');
 });
 
 // DB 健康檢查（部署前先本地驗收這個）
-app.get('/api/dbping', async (_req, res) => {
+app.get(['/api/dbping', '/dbping'], async (_req, res) => {
   try {
     const { rows } = await pool.query('select 1 as ok');
     return res.json({ db: rows[0].ok === 1 });
