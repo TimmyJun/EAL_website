@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const productRoutes = require('./routes/productRoutes');
-const { pool } = require('./db')
+// const productRoutes = require('./routes/productRoutes');
+// const { pool } = require('./db')
 const app = express();
 
 const fromEnv = (process.env.CORS_WHITELIST || '')
@@ -34,7 +34,7 @@ app.use(express.json());
 
 app.use(express.json());
 
-app.use('/api/products', productRoutes);
+// app.use('/api/products', productRoutes);
 
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
 
@@ -51,6 +51,11 @@ app.get(['/api/dbping', '/dbping'], async (_req, res) => {
     console.error('[dbping] error', e);
     return res.status(500).json({ db: false, error: e.message });
   }
+});
+
+app.use((err, req, res, _next) => {
+  console.error('[EXPRESS ERROR]', err);
+  res.status(500).json({ ok: false, message: err.message });
 });
 
 module.exports = app;
