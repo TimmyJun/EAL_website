@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
-// const { pool } = require('./db')
+const { pool } = require('./db')
 const app = express();
 
 const fromEnv = (process.env.CORS_WHITELIST || '')
