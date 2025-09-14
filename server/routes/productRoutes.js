@@ -14,4 +14,16 @@ router.get('/collections/season-tags', ctrl.seasonTags);
 // 產品詳情
 router.get('/:id', ctrl.getOne);
 
+// 臨時偵錯：列出這個 router 內所有註冊路徑
+router.get('/__routes', (_req, res) => {
+  const paths = [];
+  for (const layer of router.stack) {
+    if (layer.route) {
+      const methods = Object.keys(layer.route.methods).map(m => m.toUpperCase()).join(',');
+      paths.push({ methods, path: layer.route.path });
+    }
+  }
+  res.json(paths);
+});
+
 module.exports = router
