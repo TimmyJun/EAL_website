@@ -1,6 +1,3 @@
-// ===== products.js (optimized) =====
-
-// 共用：把產品列表轉成 HTML
 function renderProductsHTML(products = []) {
   return products.map(p => {
     const v = p.variants?.[0];
@@ -39,7 +36,7 @@ function parseHashRoute() {
 async function renderProductsByRoute() {
   const listEl = document.querySelector('.products-list');
   const heading = document.querySelector('.products-container .collection-name');
-  if (!listEl) return; // 這頁沒有 products 區塊就略過
+  if (!listEl) return;
 
   const { route, year, type, label } = parseHashRoute();
   if (route !== 'products') return;
@@ -48,16 +45,14 @@ async function renderProductsByRoute() {
 
   try {
     if (year && type) {
-      // 有篩選參數：更新標題 + 依條件撈資料（統一走 service）
       if (heading) heading.textContent = label ? `E’TREALOUEST ${label}` : 'E’TREALOUEST';
       const items = await window.productService.fetchProductsBy({ year, type });
       listEl.innerHTML = Array.isArray(items) && items.length
         ? renderProductsHTML(items)
         : '<p>目前沒有商品</p>';
     } else {
-      // 無參數：預設標題 + 撈全部
       if (heading) heading.textContent = 'E’TREALOUEST';
-      const products = await fetchProducts(); // 你原本抓全部的函式
+      const products = await fetchProducts();
       listEl.innerHTML = Array.isArray(products) && products.length
         ? renderProductsHTML(products)
         : '<p>目前沒有商品</p>';
@@ -69,9 +64,8 @@ async function renderProductsByRoute() {
   }
 }
 
-// 首次載入 & hash 變更時觸發
 window.addEventListener('DOMContentLoaded', renderProductsByRoute);
 window.addEventListener('hashchange', renderProductsByRoute);
 
-// 若其他地方仍呼叫 initProductsPage，維持 API 相容
+// 維持相容
 window.initProductsPage = renderProductsByRoute;

@@ -7,7 +7,6 @@ function renderCartBadge(count) {
   else { el.textContent = ''; el.classList.remove('show'); }
 }
 
-// 初次渲染與事件
 document.addEventListener('DOMContentLoaded', () => renderCartBadge(window.getCartCount?.() ?? 0));
 window.addEventListener('hashchange', () => renderCartBadge(window.getCartCount?.() ?? 0));
 window.addEventListener('cart:updated', (e) => {

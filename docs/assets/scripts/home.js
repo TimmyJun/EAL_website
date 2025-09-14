@@ -7,9 +7,7 @@ function initScrollObserver() {
         observer.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.5
-  });
+  }, { threshold: 0.5 });
 
   elements.forEach(el => observer.observe(el));
 }

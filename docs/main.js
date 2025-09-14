@@ -14,14 +14,17 @@ function parseHash() {
 }
 
 function loadPage(page /* 只放純頁名 */) {
-  // 這裡千萬別帶上 ?id=...
-  fetch(`pages/${page}.html`)
-    .then(res => res.text())
+  fetch(`pages/${page}.html`, { cache: 'no-store' })
+    .then(res => res.ok ? res.text() : Promise.reject(new Error(`pages/${page}.html not found`)))
     .then(html => {
       app.innerHTML = html;
       loadCSS(page);
       loadScript(page);
       window.scrollTo(0, 0);
+    })
+    .catch(err => {
+      console.error('[loadPage] ', err);
+      app.innerHTML = `<main style="padding:2rem"><h2>頁面載入失敗</h2><pre>${String(err.message || err)}</pre></main>`;
     });
 }
 
@@ -33,7 +36,7 @@ function loadCSS(page /* 純頁名 */) {
   link = document.createElement('link');
   link.id = linkId;
   link.rel = "stylesheet";
-  link.href = `assets/styles/${page}.css`; // ✅ 只用純頁名
+  link.href = `assets/styles/${page}.css`;
   document.head.append(link);
 }
 
@@ -43,7 +46,7 @@ function loadScript(page /* 純頁名 */) {
   if (oldScript) oldScript.remove();
 
   const script = document.createElement("script");
-  script.src = `assets/scripts/${page}.js`;    // ✅ 只用純頁名
+  script.src = `assets/scripts/${page}.js`;
   script.id = scriptId;
 
   script.onload = () => {
@@ -52,6 +55,7 @@ function loadScript(page /* 純頁名 */) {
       window[initFunctionName]();               // product.js 內部自己用 hash 抓 id
     }
   };
+  script.onerror = (e) => console.error('[loadScript] 無法載入', script.src, e);
 
   document.body.appendChild(script);
 }
@@ -67,5 +71,13 @@ function handleRoute() {
   closeMenu();
 }
 
-window.addEventListener("load", handleRoute);
+// 若 config-loader.js 未載入，保險建立
+if (!window.CONFIG_READY) {
+  window.CONFIG = window.CONFIG || {};
+  window.CONFIG.API_BASE = window.CONFIG.API_BASE || 'http://localhost:3000';
+  window.CONFIG_READY = Promise.resolve();
+}
+
+// 啟動
+window.addEventListener("DOMContentLoaded", handleRoute);
 window.addEventListener("hashchange", handleRoute);
