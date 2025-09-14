@@ -1,60 +1,48 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 
-/** 允許的前端來源（GitHub Pages 網域即可） */
+// --- CORS（你原本那套保持；以下是一個穩定範例） ---
 const ALLOWLIST = (process.env.CORS_WHITELIST || 'https://timmyjun.github.io')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
+  .split(',').map(s => s.trim()).filter(Boolean);
+const isAllowed = (o) => !o || ALLOWLIST.includes(o);
 
-const isAllowed = (origin) => !origin || ALLOWLIST.includes(origin);
+app.use((req, res, next) => { res.setHeader('Vary', 'Origin'); next(); });
 
-/** 保證 Cache 正確區分不同 Origin */
-app.use((req, res, next) => {
-  res.setHeader('Vary', 'Origin');
-  next();
-});
-
-/** 標準 cors()（涵蓋大部分情況） */
 const corsOptions = {
-  origin(origin, cb) {
-    if (isAllowed(origin)) return cb(null, true);
-    return cb(new Error('Not allowed by CORS'));
-  },
-  credentials: false, // 目前不傳 cookie，先用 false 最單純
+  origin(origin, cb) { return isAllowed(origin) ? cb(null, true) : cb(new Error('Not allowed by CORS')); },
+  credentials: false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
-
-/** ✅ Express 5 相容的預檢處理：改掉 '*'，用正規表達式捕捉全部路徑 */
 app.options(/.*/, cors(corsOptions));
+// ----------------------------------------------------
 
-/** 保險層：就算後面 404/500，也補上必要的 CORS 標頭 */
-app.use((req, res, next) => {
-  const o = req.headers.origin;
-  if (isAllowed(o)) {
-    res.setHeader('Access-Control-Allow-Origin', o || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'false');
-  }
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
-  next();
-});
-
-/** 再來才是 body parser 與你的路由 */
 app.use(express.json());
 
-/** 你的路由掛載（示例） */
+// 健康檢查
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
 
-const productRoutes = require('./routes/productRoutes');
+// ✅ 全域偵錯：看 Express 實際收到什麼 URL
+app.get('/api/__whoami', (req, res) => {
+  res.json({ method: req.method, url: req.url, originalUrl: req.originalUrl });
+});
+
+// ✅ 掛上產品路由（一定要在任何 404 / 錯誤處理器之前）
 app.use('/api/products', productRoutes);
 
-/** Vercel：不要 app.listen()，改匯出 app */
-module.exports = app
+// （可選）最後的 404
+app.use((req, res) => res.status(404).json({ ok: false, path: req.originalUrl }));
+
+// （可選）錯誤處理器
+app.use((err, req, res, _next) => {
+  console.error('[ERROR]', err);
+  res.status(500).json({ ok: false, message: err.message });
+});
+
+module.exports = app;

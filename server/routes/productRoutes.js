@@ -1,20 +1,20 @@
+// server/routes/productRoutes.js
 const router = require('express').Router();
 const ctrl = require('../controllers/productController');
 
+// 偵錯：確認這個 router 有被掛到
+router.get('/ping', (_req, res) => res.json({ ok: true }));
 
-// 產品列表（支援 year+type 篩選）
+// 列表
 router.get('/', ctrl.list);
 
-//API檢查
-router.get('/ping', (req, res) => res.json({ ok: true })); // 健康檢查
+// ✅ 目標路由（放在 :id 之前；並加一個可選結尾斜線）
+router.get(['/collections/season-tags', '/collections/season-tags/'], ctrl.seasonTags);
 
-// 年+季清單（用來產出 25SS/24FW 的選單）
-router.get('/collections/season-tags', ctrl.seasonTags);
-
-// 產品詳情
+// 單筆
 router.get('/:id', ctrl.getOne);
 
-// 臨時偵錯：列出這個 router 內所有註冊路徑
+// 偵錯：列出這個 router 內的所有已註冊路徑
 router.get('/__routes', (_req, res) => {
   const paths = [];
   for (const layer of router.stack) {
@@ -26,4 +26,4 @@ router.get('/__routes', (_req, res) => {
   res.json(paths);
 });
 
-module.exports = router
+module.exports = router;
