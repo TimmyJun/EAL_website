@@ -1,61 +1,62 @@
+// --- top: env + deps ---
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const productRoutes = require('./routes/productRoutes');
-const { pool } = require('./db')
+
 const app = express();
 
-const fromEnv = (process.env.CORS_WHITELIST || '')
+// 允許的前端來源（GitHub Pages 網域）
+const ALLOWLIST = (process.env.CORS_WHITELIST || 'https://timmyjun.github.io')
   .split(',')
   .map(s => s.trim())
   .filter(Boolean);
 
-const whitelist = [
-  'https://timmyjun.github.io',
-  'http://localhost:3000',
-  'http://127.0.0.1:5500',
-  ...fromEnv
-]
+// 統一檢查 origin 是否允許
+function isAllowed(origin) {
+  return !origin || ALLOWLIST.includes(origin);
+}
 
+// （1）加 Vary: Origin，避免快取污染
+app.use((req, res, next) => {
+  res.setHeader('Vary', 'Origin');
+  next();
+});
+
+// （2）先掛 cors 中介軟體（涵蓋一般情況）
 const corsOptions = {
   origin(origin, cb) {
-    // 無 Origin（如 Postman/curl）就放行
-    if (!origin || whitelist.includes(origin)) return cb(null, true);
-
-    // 偵錯：印出被擋的來源，方便你加進白名單
-    console.warn('[CORS blocked] origin =', origin);
-    return cb(new Error('Not allowed by CORS'));
+    if (isAllowed(origin)) return cb(null, true);
+    cb(new Error('Not allowed by CORS'));
   },
-  credentials: false,
+  credentials: false, // 你目前不帶 cookie
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204,
 };
-
 app.use(cors(corsOptions));
+
+// （3）顯式處理所有預檢請求（避免少數情境 404）
+app.options('*', cors(corsOptions));
+
+// （4）保險：就算後面路由/錯誤沒經過 cors，也先補上最小必要標頭
+app.use((req, res, next) => {
+  const o = req.headers.origin;
+  if (isAllowed(o)) {
+    res.setHeader('Access-Control-Allow-Origin', o || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // 若你未來需要帶 cookie，將 credentials 改為 'true'，並把上面的 corsOptions.credentials 也改為 true
+    res.setHeader('Access-Control-Allow-Credentials', 'false');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
+// （5）再來才是 body parser 與你的路由
 app.use(express.json());
 
-app.use(express.json());
-
-app.use('/api/products', productRoutes);
 
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
-
-app.get('/', (req, res) => {
-  res.send('✅ Express server is running');
-});
-
-// DB 健康檢查（部署前先本地驗收這個）
-app.get(['/api/dbping', '/dbping'], async (_req, res) => {
-  try {
-    const { rows } = await pool.query('select 1 as ok');
-    return res.json({ db: rows[0].ok === 1 });
-  } catch (e) {
-    console.error('[dbping] error', e);
-    return res.status(500).json({ db: false, error: e.message });
-  }
-});
-
-app.use((err, req, res, _next) => {
-  console.error('[EXPRESS ERROR]', err);
-  res.status(500).json({ ok: false, message: err.message });
-});
-
-module.exports = app;
+const productRoutes = require('./routes/productRoutes');
+app.use('/api/products', productRoutes);
+module.exports = app
