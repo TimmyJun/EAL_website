@@ -33,8 +33,18 @@ app.get('/api/__whoami', (req, res) => {
   res.json({ method: req.method, url: req.url, originalUrl: req.originalUrl });
 });
 
+// ✅ 直接在 app 層提供 products 偵錯端點（不經由 router）
+app.get('/api/products/__whoami', (req, res) => {
+  res.json({ method: req.method, url: req.url, baseUrl: req.baseUrl, originalUrl: req.originalUrl });
+});
+
 // ✅ 掛上產品路由（一定要在任何 404 / 錯誤處理器之前）
 app.use('/api/products', productRoutes);
+
+// 若未命中 productRoutes 的任何路由，提供更清楚的 404 訊息
+app.use('/api/products', (req, res, _next) => {
+  res.status(404).json({ ok: false, where: 'products-fallback', url: req.url, baseUrl: req.baseUrl, originalUrl: req.originalUrl });
+});
 
 // （可選）最後的 404
 app.use((req, res) => res.status(404).json({ ok: false, path: req.originalUrl }));
