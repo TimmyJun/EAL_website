@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const productRoutes = require('./routes/productRoutes');
 
 const app = express();
@@ -24,19 +25,12 @@ app.options(/.*/, cors(corsOptions));
 // ----------------------------------------------------
 
 app.use(express.json());
+app.use(compression());
 
 // 健康檢查
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
 
-// ✅ 全域偵錯：看 Express 實際收到什麼 URL
-app.get('/api/__whoami', (req, res) => {
-  res.json({ method: req.method, url: req.url, originalUrl: req.originalUrl });
-});
-
-// ✅ 直接在 app 層提供 products 偵錯端點（不經由 router）
-app.get('/api/products/__whoami', (req, res) => {
-  res.json({ method: req.method, url: req.url, baseUrl: req.baseUrl, originalUrl: req.originalUrl });
-});
+// （清理）移除診斷端點 __whoami
 
 // ✅ 掛上產品路由（一定要在任何 404 / 錯誤處理器之前）
 app.use('/api/products', productRoutes);

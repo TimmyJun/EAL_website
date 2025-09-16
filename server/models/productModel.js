@@ -1,6 +1,8 @@
 // models/productModel.js
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+// 在 serverless 環境重用 PrismaClient，避免每次 cold start 建立新連線
+const prisma = globalThis.__PRISMA__ || new PrismaClient();
+if (!globalThis.__PRISMA__) globalThis.__PRISMA__ = prisma;
 
 // 共用：把 type(ss|fw) 轉為 season(SS|FW)
 function normalizeSeasonFromType(type) {

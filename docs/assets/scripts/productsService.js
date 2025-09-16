@@ -14,7 +14,7 @@
     const API_BASE = buildApiBase();
     const url = `${API_BASE}${path}`;
     return fetch(url, {
-      cache: 'no-store',
+      cache: 'force-cache',
       credentials: 'omit',
       ...opt
     }).then(async (res) => {
@@ -27,26 +27,44 @@
     });
   }
 
+  // 簡易記憶體快取（TTL）
+  const memoryCache = new Map();
+  function withCache(key, ttlMs, loader) {
+    const now = Date.now();
+    const cached = memoryCache.get(key);
+    if (cached && cached.expiry > now) return Promise.resolve(cached.data);
+    return Promise.resolve()
+      .then(loader)
+      .then(data => {
+        memoryCache.set(key, { expiry: now + ttlMs, data });
+        return data;
+      });
+  }
+
   // ---- 你現有的全域函式（保持相容）----
   function api(path) { return `${buildApiBase()}${path}`; }
 
   async function fetchProducts() {
     await window.CONFIG_READY;
-    const res = await fetch(api('/api/products'), { cache: 'no-store' });
-    if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
-    return res.json();
+    return withCache('products:all', 60_000, async () => {
+      const res = await fetch(api('/api/products'), { cache: 'force-cache' });
+      if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
+      return res.json();
+    });
   }
 
   async function fetchProductById(id) {
     await window.CONFIG_READY;
     const url = api(`/api/products/${encodeURIComponent(id)}`);
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      console.error('fetchProductById failed', res.status, text);
-      throw new Error(`Fetch product failed: ${res.status}`);
-    }
-    return res.json();
+    return withCache(`products:id:${id}`, 60_000, async () => {
+      const res = await fetch(url, { cache: 'force-cache' });
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        console.error('fetchProductById failed', res.status, text);
+        throw new Error(`Fetch product failed: ${res.status}`);
+      }
+      return res.json();
+    });
   }
 
   async function fetchProductsBy({ year, type } = {}) {
@@ -54,16 +72,21 @@
     const baseUrl = new URL(api('/api/products'), window.location.origin);
     if (year) baseUrl.searchParams.set('year', String(year));
     if (type) baseUrl.searchParams.set('type', String(type));
-    const res = await fetch(baseUrl.toString(), { cache: 'no-store' });
-    if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
-    return res.json();
+    const key = `products:query:${year || ''}:${type || ''}`;
+    return withCache(key, 60_000, async () => {
+      const res = await fetch(baseUrl.toString(), { cache: 'force-cache' });
+      if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
+      return res.json();
+    });
   }
 
   async function fetchSeasonTags() {
     await window.CONFIG_READY;
-    const res = await fetch(api('/api/products/collections/season-tags'), { cache: 'no-store' });
-    if (!res.ok) throw new Error(`Fetch season tags failed: ${res.status}`);
-    return res.json();
+    return withCache('products:season-tags', 3_600_000, async () => {
+      const res = await fetch(api('/api/products/collections/season-tags'), { cache: 'force-cache' });
+      if (!res.ok) throw new Error(`Fetch season tags failed: ${res.status}`);
+      return res.json();
+    });
   }
 
   // ---- 給 side cart 批次用：依 id 取展示 meta ----
