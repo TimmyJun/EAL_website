@@ -1,7 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const compression = require('compression');
+// compression 可能在舊部署尚未安裝，容錯處理避免 500
+let compression = null;
+try { compression = require('compression'); }
+catch (_e) { compression = () => (req, res, next) => next(); }
 const productRoutes = require('./routes/productRoutes');
 
 const app = express();
