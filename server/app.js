@@ -12,7 +12,8 @@ const app = express();
 // --- CORS（開放；避免白名單不符導致 500 與缺少 CORS 標頭） ---
 app.use((req, res, next) => { res.setHeader('Vary', 'Origin'); next(); });
 app.use(cors({ origin: true, credentials: false }));
-app.options('*', cors({ origin: true, credentials: false }));
+// Express 5 不接受萬用字元字串，改用正則
+app.options(/.*/, cors({ origin: true, credentials: false }));
 // -------------------------------------------------------
 
 app.use(express.json());
