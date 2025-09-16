@@ -13,12 +13,12 @@ app.options('*', cors({ origin: true, credentials: false }));
 // -------------------------------------------------------
 
 app.use(express.json());
-app.use(compression());
 
 // 健康檢查
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
 
-// （清理）移除診斷端點 __whoami
+// 將壓縮延後到健康檢查之後（排除壓縮導致的 500）
+app.use(compression());
 
 // ✅ 掛上產品路由（一定要在任何 404 / 錯誤處理器之前）
 app.use('/api/products', productRoutes);
