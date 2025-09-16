@@ -6,23 +6,11 @@ const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 
-// --- CORS（你原本那套保持；以下是一個穩定範例） ---
-const ALLOWLIST = (process.env.CORS_WHITELIST || 'https://timmyjun.github.io')
-  .split(',').map(s => s.trim()).filter(Boolean);
-const isAllowed = (o) => !o || ALLOWLIST.includes(o);
-
+// --- CORS（開放；避免白名單不符導致 500 與缺少 CORS 標頭） ---
 app.use((req, res, next) => { res.setHeader('Vary', 'Origin'); next(); });
-
-const corsOptions = {
-  origin(origin, cb) { return isAllowed(origin) ? cb(null, true) : cb(new Error('Not allowed by CORS')); },
-  credentials: false,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 204,
-};
-app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
-// ----------------------------------------------------
+app.use(cors({ origin: true, credentials: false }));
+app.options('*', cors({ origin: true, credentials: false }));
+// -------------------------------------------------------
 
 app.use(express.json());
 app.use(compression());
