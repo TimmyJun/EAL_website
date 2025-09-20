@@ -7,44 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Season {
-  SS //Spring + Summer
-  FW // Fall + Winter
-}
-
 model Product {
-  id        String   @id @default(cuid())
-  title     String
-  price     Int      @default(0)   // 先給預設值，讓既有資料能過
-  description String?  @db.Text
-
-  year  Int
-  season Season
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  variants  Variant[]
+  id          String    @id @default(cuid())
+  title       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  price       Int       @default(0)
+  description String?
+  season      Season
+  year        Int
+  variants    Variant[]
 
   @@index([year, season])
 }
 
-
-
 model Variant {
-  id        String   @id @default(cuid())
-  color     String   // 顏色名稱（例：White, Black, Navy）
-  thumbnails String[] // 這個顏色對應的圖片列表
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String
+  id         String   @id @default(cuid())
+  color      String
+  thumbnails String[]
+  productId  String
+  colorCode  String?  @db.VarChar(7)
+  sizes      Size[]
+  product    Product  @relation(fields: [productId], references: [id])
 
-  sizes     Size[]
+  @@unique([productId, colorCode], name: "uniq_variant_colorcode_per_product")
 }
 
 model Size {
-  id        String   @id @default(cuid())
-  label     String   // 尺寸（例：1, 2, 3）
-  stock     Int      // 庫存數量
-  variant   Variant  @relation(fields: [variantId], references: [id])
+  id        String  @id @default(cuid())
+  label     String
+  stock     Int
   variantId String
+  variant   Variant @relation(fields: [variantId], references: [id])
+}
+
+enum Season {
+  SS
+  FW
 }

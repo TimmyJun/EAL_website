@@ -5,16 +5,11 @@
   "directories": {
     "doc": "docs"
   },
-  "prisma": {
-    "seed": "node scripts/seed-one-product.js",
-    "schema": "prisma/schema.prisma"
-  },
   "engines": {
     "node": "20.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed:one": "prisma db seed",
     "start": "node server/app.js",
     "postinstall": "prisma generate"
   },

@@ -40,6 +40,7 @@ async function main() {
   const variantsToCreate = [
     {
       color: "white",
+      colorCode: "#FFFFFF",
       thumbnails: [
         "https://eal-testing-bucket.s3.ap-northeast-3.amazonaws.com/images/25ss_white.jpg",
         "https://eal-testing-bucket.s3.ap-northeast-3.amazonaws.com/images/25ss_white_back.jpg"
@@ -54,6 +55,7 @@ async function main() {
     },
     {
       color: "Black",
+      colorCode: "#000000",
       thumbnails: [
         "https://eal-testing-bucket.s3.ap-northeast-3.amazonaws.com/images/25ss_black.jpg",
         "https://eal-testing-bucket.s3.ap-northeast-3.amazonaws.com/images/25ss_black_back.jpg"
