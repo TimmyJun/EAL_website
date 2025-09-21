@@ -2,34 +2,36 @@
   // 若 config-loader.js 未正確載入，保險處理
   if (!window.CONFIG_READY) {
     window.CONFIG = window.CONFIG || {};
-    window.CONFIG.API_BASE = window.CONFIG.API_BASE || 'http://localhost:3000';
-    window.CONFIG_READY = Promise.resolve();
+    window.CONFIG.API_BASE = window.CONFIG.API_BASE || 'http://localhost:3000'
+    window.CONFIG.CACHE_VERSION = window.CONFIG.CACHE_VERSION || 'v1'
+    window.CONFIG_READY = Promise.resolve()
   }
+
+  const IS_DEV = !/production/i.test(String(window.NODE_ENV || '')) && 
+  (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
 
   function buildApiBase() {
     return window.CONFIG.API_BASE || 'http://localhost:3000';
   }
 
-  function apiFetch(path, opt = {}) {
-    const API_BASE = buildApiBase();
-    const url = `${API_BASE}${path}`;
-    return fetch(url, {
-      cache: 'force-cache',
-      credentials: 'omit',
-      ...opt
-    }).then(async (res) => {
-      if (!res.ok) {
-        const text = await res.text().catch(() => '');
-        throw new Error(`API ${res.status} ${res.statusText} @ ${url}\n${text}`);
-      }
-      const ct = res.headers.get('content-type') || '';
-      return ct.includes('application/json') ? res.json() : res.text();
-    });
+  function cacheMode(forceFresh = false) {
+    // 開發環境或明確要求新鮮 → 不用瀏覽器快取
+    return (IS_DEV || forceFresh) ? 'no-store' : 'force-cache';
+  }
+
+  function withTs(url, forceFresh = false) {
+    if(!(IS_DEV || forceFresh)) return url
+    const u = new URL(url)
+    u.searchParams.set('_ts', Date.now().toString()) // 破壞快取參數
+    return u.toString()
   }
 
   // 簡易記憶體快取（TTL）
-  const memoryCache = new Map();
-  function withCache(key, ttlMs, loader) {
+  const memoryCache = new Map()
+
+  function withCache(key, ttlMs, loader, forceFresh = false) {
+    // 開發或 forceFresh 時繞過記憶體快取
+    if (IS_DEV || forceFresh) return Promise.resolve().then(loader)
     const now = Date.now();
     const cached = memoryCache.get(key);
     if (cached && cached.expiry > now) return Promise.resolve(cached.data);
@@ -44,49 +46,61 @@
   // ---- 你現有的全域函式（保持相容）----
   function api(path) { return `${buildApiBase()}${path}`; }
 
-  async function fetchProducts() {
+  async function fetchProducts({fresh = false} = {}) {
     await window.CONFIG_READY;
-    return withCache('products:all', 60_000, async () => {
-      const res = await fetch(api('/api/products'), { cache: 'force-cache' });
-      if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
-      return res.json();
-    });
+    const key = `products:all:${window.CONFIG.CACHE_VERSION}`
+    return withCache(key, 60_000, async() => {
+      const url = withTs(api('/api/products'), fresh)
+      const res = await fetch(url, { cache: cacheMode(fresh) })
+      if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`)
+      return res.json()
+    }, fresh)
   }
 
-  async function fetchProductById(id) {
-    await window.CONFIG_READY;
-    const url = api(`/api/products/${encodeURIComponent(id)}`);
-    return withCache(`products:id:${id}`, 60_000, async () => {
-      const res = await fetch(url, { cache: 'force-cache' });
+  async function fetchProductById(id, {fresh = false} = {}) {
+    await window.CONFIG_READY
+    const key = `products:id:${window.CONFIG.CACHE_VERSION}:${id}`
+    const url = withTs(api(`/api/products/${encodeURIComponent(id)}`), fresh)
+    return withCache(key, 60_000, async () => {
+      const res = await fetch(url, {cache: cacheMode(fresh)})
       if (!res.ok) {
         const text = await res.text().catch(() => '');
         console.error('fetchProductById failed', res.status, text);
         throw new Error(`Fetch product failed: ${res.status}`);
       }
       return res.json();
-    });
+    }, fresh)
   }
 
-  async function fetchProductsBy({ year, type } = {}) {
+  async function fetchProductsBy({ year, type, fresh = false } = {}) {
     await window.CONFIG_READY;
     const baseUrl = new URL(api('/api/products'), window.location.origin);
     if (year) baseUrl.searchParams.set('year', String(year));
     if (type) baseUrl.searchParams.set('type', String(type));
-    const key = `products:query:${year || ''}:${type || ''}`;
+    const key = `products:query:${window.CONFIG.CACHE_VERSION}:${year || ''}:${type || ''}`
+    const url = withTs(baseUrl.toString(), fresh)
     return withCache(key, 60_000, async () => {
-      const res = await fetch(baseUrl.toString(), { cache: 'force-cache' });
+      const res = await fetch(url, { cache: cacheMode(fresh) });
       if (!res.ok) throw new Error(`Fetch products failed: ${res.status}`);
       return res.json();
-    });
+    }, fresh)
   }
 
-  async function fetchSeasonTags() {
-    await window.CONFIG_READY;
-    return withCache('products:season-tags', 3_600_000, async () => {
-      const res = await fetch(api('/api/products/collections/season-tags'), { cache: 'force-cache' });
+  async function fetchSeasonTags({fresh = false} = {}) {
+    await window.CONFIG_READY
+    const key = `products:season-tags:${window.CONFIG.CACHE_VERSION}`
+    const url = withTs(api('/api/products/collections/season-tags'), fresh)
+    return withCache(key, 3_600_000, async () => {
+      const res = await fetch(url, { cache: cacheMode(fresh) })
       if (!res.ok) throw new Error(`Fetch season tags failed: ${res.status}`);
       return res.json();
-    });
+    }, fresh)
+  }
+
+  function invalidateCache(prefix = '') {
+    Array.from(memoryCache.keys()).forEach(k => {
+      if (!prefix || String(k).startsWith(prefix)) memoryCache.delete(k)
+    })
   }
 
   // ---- 給 side cart 批次用：依 id 取展示 meta ----
@@ -130,6 +144,7 @@
   window.productService = {
     fetchByIds,
     fetchProductsBy,
-    fetchSeasonTags
+    fetchSeasonTags,
+    invalidateCache
   };
 })();

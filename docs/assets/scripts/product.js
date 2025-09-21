@@ -49,6 +49,7 @@
   function findVariantByColor(product, color) {
     return (product.variants || []).find(v => v.color === color) || null;
   }
+
   function sumVariantStock(variant) {
     return (variant?.sizes || []).reduce((s, sz) => s + Math.max(0, Number(sz.stock) || 0), 0);
   }
@@ -103,9 +104,17 @@
         (!disabled && idx === firstAvailableIdx) ? 'color-active' : '',
         disabled ? 'color-disabled' : '',
       ].filter(Boolean).join(' ');
-      return `<button class="${cls}" data-color="${v.color}" ${disabled ? 'disabled' : ''}></button>`;
+      return `
+      <button class="${cls}"
+              data-color="${v.color}"
+              data-color-code="${v.colorCode || ''}"
+              style="background-color:${v.colorCode || '#dcdcdc'}"
+              ${disabled ? 'disabled' : ''}>
+      </button>
+    `;
     }).join('');
   }
+
   function renderSizeButtons(sizes) {
     return (sizes || []).map((s, idx) => {
       const stock = Math.max(0, Number(s.stock) || 0);
@@ -118,6 +127,7 @@
       return `<button class="${cls}" data-size="${s.label}" ${disabled ? 'disabled' : ''}>${s.label}</button>`;
     }).join('');
   }
+
   function renderThumbGroupsByVariants(variants) {
     return (variants || []).map((v, idx) => `
       <div class="product-thumbnails${idx === 0 ? '' : ' photo-hidden'}" data-color="${v.color}">
