@@ -23,6 +23,9 @@ router.get('/__routes', (_req, res) => {
   res.json(paths);
 });
 
+// 檢查庫存
+router.post('/stock/check', ctrl.checkStock);
+
 // 單筆（動態路由放最後，避免吃掉其他固定路徑）
 router.get('/:id', ctrl.getOne);
 

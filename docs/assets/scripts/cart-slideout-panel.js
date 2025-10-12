@@ -167,7 +167,65 @@ window.addEventListener('cart:updated', () => {
   if (cartPanel?.classList.contains('is-open')) renderCartAsync();
 });
 
-checkoutBtn?.addEventListener('click', () => { /* location.hash = '#/checkout'; */ closeCart(); });
+// checkoutBtn?.addEventListener('click', () => { closeCart(); });
+checkoutBtn?.addEventListener('click', async () => {
+  try {
+    // 1. 先抓購物車內容
+    const entries = window.cartStore?.entries() || []
+
+    if (!entries.length) {
+      alert('購物車是空的，請先選擇商品')
+      return
+    }
+
+    // 前端驗證庫存
+    const issues = []
+    for (const e of entries) {
+      const stock = await getVariantStock(e.id, e.color, e.size)
+      if (!stock || e.qty > stock) {
+        issues.push({
+          title: e.id,
+          color: e.color,
+          size: e.size,
+          want: e.qty,
+          stock,
+        })
+      }
+    }
+
+    if (issues.length) {
+      const msg = issues.map((i) => `「${i.title}」${i.color}/${i.size} 的庫存僅 ${i.stock || 0} 件，您選擇了 ${i.want} 件`)
+        .join("\n")
+      alert(`庫存不足：\n${msg}`)
+      return
+    }
+    // 3. 後端權威驗證庫存
+    const resp = await window.productService.checkStock(
+      entries.map((e) => ({
+        id: e.id,
+        color: e.color,
+        size: e.size,
+        qty: e.qty,
+      }))
+    )
+
+    if (!resp.ok) {
+      const msg = (resp.issues || []).map((i) => `「${i.title || i.id}」${i.color}/${i.size} 欲購 ${i.want} 件，可用 ${i.available} 件`).join('\n') || "部分商品庫存不足，請重新確認"
+      alert(msg)
+      return
+    }
+
+    // 雙層驗證通過 → 進入結帳頁
+    closeCart()
+    location.hash = '#checkout'
+    // 或者之後再整合綠界流程:
+    // const order = await window.productService.createOrder(entries);
+    // submitToEcpay(order);
+  } catch (err) {
+    console.error('[checkout error]', err);
+    alert('結帳前檢查失敗，請稍後再試');
+  }
+})
 
 window.openCart = openCart
 window.closeCart = closeCart

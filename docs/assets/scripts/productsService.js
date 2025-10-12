@@ -135,6 +135,19 @@
     return map;
   }
 
+  async function checkStock(items = []) {
+    await window.CONFIG_READY;
+    const url = api('/api/products/stock/check');
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store', // 確保即時查詢
+      body: JSON.stringify({ items }),
+    });
+    if (!res.ok) throw new Error(`checkStock failed: ${res.status}`);
+    return res.json(); // 回傳 { ok: true } 或 { ok: false, issues: [...] }
+  }
+
   // ---- 導出（同時提供全域函式與命名空間）----
   window.fetchProducts = fetchProducts;
   window.fetchProductById = fetchProductById;
@@ -145,6 +158,7 @@
     fetchByIds,
     fetchProductsBy,
     fetchSeasonTags,
-    invalidateCache
+    invalidateCache,
+    checkStock
   };
 })();

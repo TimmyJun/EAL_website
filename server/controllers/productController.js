@@ -43,3 +43,50 @@ exports.seasonTags = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 }
+
+// POST /api/products/stock/check
+exports.checkStock = async (req, res) => {
+  try {
+    const items = Array.isArray(req.body.items) ? req.body.items : [];
+    const issues = [];
+
+    for (const it of items) {
+      const p = await productModel.getProductById(it.id);
+      if (!p) {
+        issues.push({
+          id: it.id,
+          color: it.color,
+          size: it.size,
+          want: it.qty,
+          available: 0,
+          reason: 'NOT_FOUND',
+        });
+        continue;
+      }
+
+      const variant = (p.variants || []).find(v => v.color === it.color);
+      const sizeRow = variant?.sizes?.find(s => s.label === it.size);
+      const available = Math.max(0, Number(sizeRow?.stock || 0));
+
+      if (available < it.qty) {
+        issues.push({
+          id: it.id,
+          title: p.title,
+          color: it.color,
+          size: it.size,
+          want: it.qty,
+          available,
+          reason: 'INSUFFICIENT',
+        });
+      }
+    }
+
+    if (issues.length) {
+      return res.status(200).json({ ok: false, issues });
+    }
+    return res.json({ ok: true });
+  } catch (e) {
+    console.error('[checkStock error]', e);
+    res.status(500).json({ ok: false, message: 'Server error' });
+  }
+};
