@@ -1,0 +1,121 @@
+<div class="container">
+  <!-- 左：訂單資訊 -->
+  <form id="checkoutForm" class="card" novalidate>
+    <div class="section">
+      <h1>訂單資訊</h1>
+      <p class="note">請填寫收件與聯絡方式；超商到店取貨目前免運。</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="name">姓名 *</label>
+          <input id="name" name="name" required />
+          <div class="error" data-err="name">請輸入姓名</div>
+        </div>
+        <div class="field">
+          <label for="phone">手機號碼 *</label>
+          <input id="phone" name="phone" inputmode="tel" placeholder="09xxxxxxxx" required pattern="^09\\d{8}$" />
+          <div class="error" data-err="phone">請輸入正確手機號碼（09 開頭，共 10 碼）</div>
+        </div>
+        <div class="field">
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" required autocomplete="email" />
+          <div class="error" data-err="email">請輸入正確 Email</div>
+        </div>
+        <div class="field">
+          <label for="note">訂單備註（選填）</label>
+          <input id="note" name="note" placeholder="例如：白天方便聯絡" />
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>取貨方式</h2>
+    
+      <!-- 取貨方式選項 -->
+      <div class="row" style="margin-bottom:8px;">
+        <label class="row" style="gap:8px;">
+          <input type="radio" name="shipMethod" value="pickup" id="shipPickup" checked>
+          <span class="badge">超商取貨</span>
+        </label>
+        <label class="row" style="gap:8px;">
+          <input type="radio" name="shipMethod" value="home" id="shipHome">
+          <span class="badge">宅配</span>
+        </label>
+      </div>
+      <p class="muted" id="shipHint">目前僅支援台灣超商到店</p>
+    
+      <!-- 超商取貨欄位 -->
+      <div id="pickupFields" class="grid">
+        <div class="field">
+          <label for="storeBrand">超商品牌 *</label>
+          <select id="storeBrand" name="storeBrand">
+            <option value="">請選擇</option>
+            <option>7-ELEVEN</option>
+            <option>全家 FamilyMart</option>
+            <option>萊爾富 Hi-Life</option>
+            <option>OK 超商</option>
+          </select>
+          <div class="error" data-err="storeBrand">請選擇超商品牌</div>
+        </div>
+        <div class="field">
+          <label for="county">縣市 *</label>
+          <input id="county" name="county" placeholder="台北市 / 台中市 …" />
+          <div class="error" data-err="county">請輸入縣市</div>
+        </div>
+        <div class="field">
+          <label for="district">行政區 *</label>
+          <input id="district" name="district" placeholder="中正區 / 西屯區 …" />
+          <div class="error" data-err="district">請輸入行政區</div>
+        </div>
+        <div class="field">
+          <label for="storeName">分店名稱 *</label>
+          <input id="storeName" name="storeName" placeholder="例如：和平店（門市名稱）" />
+          <div class="error" data-err="storeName">請輸入分店名稱</div>
+        </div>
+        <div class="field grid-1" style="grid-column: 1 / -1;">
+          <label for="storeAddr">分店地址 *</label>
+          <input id="storeAddr" name="storeAddr" placeholder="例如：台北市中正區和平西路一段 XXX 號" />
+          <div class="error" data-err="storeAddr">請輸入分店地址</div>
+        </div>
+      </div>
+    
+      <!-- 宅配欄位（預設隱藏） -->
+      <div id="homeFields" class="grid" style="display:none;">
+        <div class="field grid-1" style="grid-column: 1 / -1;">
+          <label for="homeAddress">宅配地址 *</label>
+          <input id="homeAddress" name="homeAddress" placeholder="例如：台北市中正區和平西路一段 XXX 號" />
+          <div class="error" data-err="homeAddress">請輸入宅配地址</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section actions">
+      <button type="button" class="btn ghost" id="backBtn">返回購物車</button>
+      <button type="submit" class="btn" id="payBtn">前往付款</button>
+    </div>
+  </form>
+
+  <!-- 右：購物清單與總金額 -->
+  <aside class="card">
+    <div class="section">
+      <h2>您的購物清單</h2>
+      <div id="items" class="items"></div>
+      <div id="empty" class="empty" style="display:none;">購物車是空的</div>
+
+      <div class="totals">
+        <div class="row-between">
+          <span class="muted">小計</span>
+          <span id="subtotal">—</span>
+        </div>
+        <div class="row-between">
+          <span class="muted">運費（超商取貨）</span>
+          <span id="shipping">NT$ 0</span>
+        </div>
+        <div class="row-between grand">
+          <span>應付總額</span>
+          <span id="grand">—</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

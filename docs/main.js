@@ -4,6 +4,7 @@ const pageInitMap = {
   home: "initScrollObserver",
   product: "initProductPage",
   products: "initProductsPage",
+  checkout: "initCheckoutPage"
 };
 
 // 解析 hash -> { page: 'product', query: 'id=xxx' }
