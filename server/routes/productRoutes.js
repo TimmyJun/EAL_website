@@ -11,6 +11,8 @@ router.get('/', ctrl.list);
 // ✅ 目標路由（放在 :id 之前；並加一個可選結尾斜線；同時支援單/複數）
 router.get('/collections/season-tags', ctrl.seasonTags);
 
+router.get('/batch', ctrl.batch);  // 批次查詢
+
 // 偵錯：列出這個 router 內的所有已註冊路徑
 router.get('/__routes', (_req, res) => {
   const paths = [];

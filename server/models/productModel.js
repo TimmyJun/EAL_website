@@ -40,6 +40,16 @@ async function getProductById(id) {
   });
 }
 
+async function getProductsByIds(ids = []) {
+  const uniq = [...new Set(ids)].filter(Boolean);
+  if (!uniq.length) return [];
+  return prisma.product.findMany({
+    where: { id: { in: uniq } },
+    orderBy: { createdAt: 'desc' },
+    include: { variants: { include: { sizes: true } } },
+  });
+}
+
 // 取得去重的 (year, season) 清單
 async function getSeasonTags() {
   const rows = await prisma.product.findMany({
@@ -55,4 +65,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   getSeasonTags,
+  getProductsByIds
 };

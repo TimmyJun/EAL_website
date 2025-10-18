@@ -54,10 +54,6 @@ function bindShippingEvents() {
   });
 }
 
-function bindBack() {
-  q('#backBtn')?.addEventListener('click', () => window.history.back());
-}
-
 // ---------- 購物清單 ----------
 function fallbackCartEntries() {
   try {
@@ -197,10 +193,25 @@ async function onSubmitCheckout(e) {
 
 // ---------- Router 入口（給 main.js 呼叫） ----------
 window.initCheckoutPage = async function initCheckoutPage() {
-  // 元素已被 pages/checkout.html 插入 #app 後，才會被呼叫
   bindShippingEvents();
-  bindBack();
   updateShippingUI();
   await loadCartAndRender();
   q('#checkoutForm')?.addEventListener('submit', onSubmitCheckout);
-};
+}
+
+function isCheckoutPage() {
+  // 以是否存在 #checkoutForm 為判斷，避免受網址或 hash 影響
+  return !!document.getElementById('checkoutForm');
+}
+
+window.refreshCheckoutSidebar = async function refreshCheckoutSidebar() {
+  // 只要右側卡片需更新，沿用既有 loadCartAndRender 即可
+  await loadCartAndRender();
+}
+
+window.addEventListener('cart:closed', () => {
+  if (isCheckoutPage()) {
+    // 關閉側欄後自動刷新右側清單（items、小計、運費、總額）
+    loadCartAndRender();
+  }
+})

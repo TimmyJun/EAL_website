@@ -104,34 +104,65 @@
   }
 
   // ---- 給 side cart 批次用：依 id 取展示 meta ----
+  // async function fetchByIds(ids = []) {
+  //   await window.CONFIG_READY;
+  //   const uniq = Array.from(new Set((ids || []).filter(Boolean)));
+  //   if (!uniq.length) return {};
+
+  //   const results = await Promise.all(
+  //     uniq.map(id => fetchProductById(id).catch(() => null))
+  //   );
+
+  //   const map = {};
+  //   results.forEach((p, i) => {
+  //     if (!p) return;
+  //     const id = uniq[i];
+  //     const firstVariant = p.variants?.[0];
+  //     const fallbackImg = firstVariant?.thumbnails?.[0] || 'assets/images/placeholder.png';
+
+  //     const images = {};
+  //     (p.variants || []).forEach(v => { images[v.color] = v.thumbnails?.[0] || fallbackImg; });
+
+  //     map[id] = {
+  //       title: p.title,
+  //       price: Number(p.price) || 0,
+  //       image: fallbackImg,
+  //       images,
+  //       currency: 'TWD',
+  //     };
+  //   });
+
+  //   return map;
+  // }
+
   async function fetchByIds(ids = []) {
     await window.CONFIG_READY;
-    const uniq = Array.from(new Set((ids || []).filter(Boolean)));
+    const uniq = [...new Set(ids.filter(Boolean))];
     if (!uniq.length) return {};
 
-    const results = await Promise.all(
-      uniq.map(id => fetchProductById(id).catch(() => null))
-    );
+    // 後端提供 /api/products/batch?ids=... 介面
+    const url = new URL(api('/api/products/batch'));
+    url.searchParams.set('ids', uniq.join(','));
+
+    const res = await fetch(url.toString(), { cache: 'no-store' });
+    if (!res.ok) throw new Error(`batch fetch failed: ${res.status}`);
+    const list = await res.json(); // 假設回傳 [{id, title, price, variants:[{color, thumbnails:[]}]}, ...]
 
     const map = {};
-    results.forEach((p, i) => {
-      if (!p) return;
-      const id = uniq[i];
-      const firstVariant = p.variants?.[0];
-      const fallbackImg = firstVariant?.thumbnails?.[0] || 'assets/images/placeholder.png';
-
+    for (const p of list) {
+      const first = p.variants?.[0];
+      const fallbackImg = first?.thumbnails?.[0] || 'assets/images/placeholder.png';
       const images = {};
       (p.variants || []).forEach(v => { images[v.color] = v.thumbnails?.[0] || fallbackImg; });
 
-      map[id] = {
+      map[p.id] = {
         title: p.title,
         price: Number(p.price) || 0,
         image: fallbackImg,
         images,
         currency: 'TWD',
       };
-    });
-
+    }
     return map;
   }
 

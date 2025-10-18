@@ -38,7 +38,11 @@ const fmtMoney = (n, currency = 'TWD', locale = 'zh-TW') =>
 const escapeHTML = (s = '') => s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]))
 const calcSubtotal = rows => rows.reduce((sum, r) => sum + (Number(r.price) || 0) * (r.qty || 0), 0);
 
-let lastFocusedEl = null, focusInTrap = false;
+let lastFocusedEl = null
+let focusInTrap = false
+let focusTrapHandler = null;
+let focusTrapContainer = null;
+
 function openCart() {
   lastFocusedEl = document.activeElement;
   renderCartAsync();
@@ -46,15 +50,50 @@ function openCart() {
   cartPanel.setAttribute('aria-hidden', 'false'); cartOverlay.setAttribute('aria-hidden', 'false');
   document.documentElement.style.overflow = 'hidden'; cartPanel.focus(); trapFocus(cartPanel, true);
 }
+
 function closeCart() {
-  cartPanel.classList.remove('is-open'); cartOverlay.classList.remove('is-open');
-  cartPanel.setAttribute('aria-hidden', 'true'); cartOverlay.setAttribute('aria-hidden', 'true');
-  document.documentElement.style.overflow = ''; trapFocus(cartPanel, false); if (lastFocusedEl) lastFocusedEl.focus();
+  // 先解除焦點陷阱，避免殘留 handler
+  trapFocus(cartPanel, false);
+
+  // 若焦點在面板內，先把焦點移開
+  if (cartPanel.contains(document.activeElement)) {
+    (lastFocusedEl || document.body).focus();
+  }
+
+  cartPanel.classList.remove('is-open');
+  cartOverlay.classList.remove('is-open');
+  cartPanel.setAttribute('aria-hidden', 'true');
+  cartOverlay.setAttribute('aria-hidden', 'true');
+  document.documentElement.style.overflow = '';
+
+  // 最後再補一次回焦原處（可保留）
+  if (lastFocusedEl) lastFocusedEl.focus()
+  
+  try {
+    window.dispatchEvent(new CustomEvent('cart:closed', { detail: { source: 'slideout' } }));
+  } catch { }
 }
+
 function trapFocus(container, enable) {
-  if (enable && !focusInTrap) { focusInTrap = true; document.addEventListener('focus', handler, true); }
-  else if (!enable && focusInTrap) { focusInTrap = false; document.removeEventListener('focus', handler, true); }
-  function handler(e) { if (!container.contains(e.target)) { e.stopPropagation(); container.focus(); } }
+  if (enable) {
+    focusTrapContainer = container;
+    if (!focusTrapHandler) {
+      // 只建立一次 handler，之後 remove 才找得到同一個參考
+      focusTrapHandler = (e) => {
+        if (focusTrapContainer && !focusTrapContainer.contains(e.target)) {
+          e.stopPropagation();
+          focusTrapContainer.focus();
+        }
+      };
+      document.addEventListener('focus', focusTrapHandler, true);
+    }
+  } else {
+    if (focusTrapHandler) {
+      document.removeEventListener('focus', focusTrapHandler, true);
+      focusTrapHandler = null;
+    }
+    focusTrapContainer = null;
+  }
 }
 
 cartOverlay?.addEventListener('click', closeCart);
@@ -167,7 +206,6 @@ window.addEventListener('cart:updated', () => {
   if (cartPanel?.classList.contains('is-open')) renderCartAsync();
 });
 
-// checkoutBtn?.addEventListener('click', () => { closeCart(); });
 checkoutBtn?.addEventListener('click', async () => {
   try {
     // 1. 先抓購物車內容
@@ -200,20 +238,20 @@ checkoutBtn?.addEventListener('click', async () => {
       return
     }
     // 3. 後端權威驗證庫存
-    const resp = await window.productService.checkStock(
-      entries.map((e) => ({
-        id: e.id,
-        color: e.color,
-        size: e.size,
-        qty: e.qty,
-      }))
-    )
+    // const resp = await window.productService.checkStock(
+    //   entries.map((e) => ({
+    //     id: e.id,
+    //     color: e.color,
+    //     size: e.size,
+    //     qty: e.qty,
+    //   }))
+    // )
 
-    if (!resp.ok) {
-      const msg = (resp.issues || []).map((i) => `「${i.title || i.id}」${i.color}/${i.size} 欲購 ${i.want} 件，可用 ${i.available} 件`).join('\n') || "部分商品庫存不足，請重新確認"
-      alert(msg)
-      return
-    }
+    // if (!resp.ok) {
+    //   const msg = (resp.issues || []).map((i) => `「${i.title || i.id}」${i.color}/${i.size} 欲購 ${i.want} 件，可用 ${i.available} 件`).join('\n') || "部分商品庫存不足，請重新確認"
+    //   alert(msg)
+    //   return
+    // }
 
     // 雙層驗證通過 → 進入結帳頁
     closeCart()
