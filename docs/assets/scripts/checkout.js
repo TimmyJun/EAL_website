@@ -11,6 +11,12 @@ function showError(id, show) {
   if (el) el.classList.toggle('show', !!show);
 }
 
+function getHashParams() {
+  const raw = location.hash || '';  // 例如 "#checkout?mode=complete&s=1&orderNo=O123"
+  const q = raw.includes('?') ? raw.split('?')[1] : '';
+  return new URLSearchParams(q);
+}
+
 // ---------- UI 切換 & 金額 ----------
 function renderTotals(subtotal) {
   const method = getShipMethod();
@@ -162,6 +168,40 @@ function buildAndStorePayload(entries, grand) {
   return payload;
 }
 
+async function postAndRedirectToEcpay({ grand, email, entries }) {
+  // 產生一個前端測試用單號（正式上線可改由後端產生）
+  const tradeNo = 'O' + Date.now();
+  const API_BASE = (window.CONFIG && window.CONFIG.API_BASE) || 'http://localhost:3000'
+
+  // 品名可簡化成「共 N 項商品」，或你要用實際品名以 # 串接也行
+  const itemName = `共 ${entries.length} 項商品`;
+
+  const resp = await fetch(`${API_BASE}/api/pay/ecpay/create`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tradeNo,
+      amount: grand,
+      itemName,
+      email
+    })
+  });
+
+  if (!resp.ok) {
+    const t = await resp.text().catch(() => '');
+    throw new Error(`create order failed: ${resp.status} ${t}`);
+  }
+
+  // 伺服器回的是一段含 <form action=".../AioCheckOut/V5"> 的 HTML
+  const html = await resp.text();
+
+  // 用同一個分頁寫入，避免被彈出視窗阻擋器擋住
+  const w = window.open('', '_self');
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
 // ---------- Submit ----------
 async function onSubmitCheckout(e) {
   e.preventDefault();
@@ -181,8 +221,12 @@ async function onSubmitCheckout(e) {
       alert(msg); return;
     }
 
-    buildAndStorePayload(entries, grand);
-    alert('表單已通過並保存。下一步可串接綠界建立訂單。');
+    const payload = buildAndStorePayload(entries, grand)
+    await postAndRedirectToEcpay({
+      grand,
+      email: payload.contact.email,
+      entries
+    })
   } catch (err) {
     console.error('[checkout submit error]', err);
     alert('處理失敗，請稍後再試');
@@ -191,8 +235,41 @@ async function onSubmitCheckout(e) {
   }
 }
 
+function renderCheckoutComplete(params) {
+  const ok = params.get('s') === '1';
+  const orderNo = params.get('orderNo') || '-';
+  const tradeNo = params.get('tradeNo') || '-';
+  const amt = params.get('amt') || '-';
+  const msg = params.get('msg') || (ok ? '付款成功' : '付款未完成');
+
+  // 找一個 checkout 頁的主要容器來替換（依你 checkout.html 的結構挑選）
+  const host = document.querySelector('#checkoutView') || document.querySelector('main') || document.body;
+
+  host.innerHTML = `
+    <section class="checkout-complete" style="padding:2rem 1rem">
+      <h1 style="margin-bottom:1rem">${ok ? '付款成功 🎉' : '付款未完成'}</h1>
+      <p>${msg}</p>
+      <ul style="margin:1rem 0 2rem; line-height:1.8">
+        <li>訂單編號：${orderNo}</li>
+        <li>交易序號：${tradeNo}</li>
+        <li>金額：${amt}</li>
+      </ul>
+      <div style="display:flex; gap:.75rem">
+        <a class="btn" href="#/">回首頁</a>
+        <a class="btn" href="#checkout">回結帳</a>
+      </div>
+    </section>
+  `;
+}
+
 // ---------- Router 入口（給 main.js 呼叫） ----------
 window.initCheckoutPage = async function initCheckoutPage() {
+  const params = getHashParams()
+  if (params.get('mode') === 'complete') {
+    renderCheckoutComplete(params);     // ← 新增：渲染完成頁
+    return;                             // 完成頁不需要後續表單綁定
+  }
+
   bindShippingEvents();
   updateShippingUI();
   await loadCartAndRender();

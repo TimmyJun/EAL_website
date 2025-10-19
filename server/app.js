@@ -5,7 +5,8 @@ const cors = require('cors');
 let compression = null;
 try { compression = require('compression'); }
 catch (_e) { compression = () => (req, res, next) => next(); }
-const productRoutes = require('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes')
+const paymentRoutes = require('./routes/paymentRoutes')
 
 const app = express();
 
@@ -16,7 +17,8 @@ app.use(cors({ origin: true, credentials: false }));
 app.options(/.*/, cors({ origin: true, credentials: false }));
 // -------------------------------------------------------
 
-app.use(express.json());
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 // 健康檢查
 app.get(['/api/health', '/health'], (_req, res) => res.json({ ok: true }));
@@ -31,6 +33,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/products', (req, res, _next) => {
   res.status(404).json({ ok: false, where: 'products-fallback', url: req.url, baseUrl: req.baseUrl, originalUrl: req.originalUrl });
 });
+
+app.use('/api/pay', paymentRoutes)
 
 // （可選）最後的 404
 app.use((req, res) => res.status(404).json({ ok: false, path: req.originalUrl }));
