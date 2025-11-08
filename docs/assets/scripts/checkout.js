@@ -69,6 +69,22 @@ function fallbackCartEntries() {
   } catch { return []; }
 }
 
+function clearCartAfterPayment() {
+  // 1) 清前端 cartStore + localStorage(app:cart:v1)
+  try {
+    window.clearCart?.();        // 這會呼叫 cartStore.clear()
+  } catch (e) {
+    console.warn('[checkout] clearCart failed:', e);
+  }
+
+  // 2) 順便把這次結帳暫存的 payload 清掉，避免下次誤用
+  try {
+    sessionStorage.removeItem('checkoutPayload');
+  } catch (e) {
+    console.warn('[checkout] remove checkoutPayload failed:', e);
+  }
+}
+
 async function loadCartAndRender() {
   const itemsWrap = q('#items');
   const empty = q('#empty');
@@ -174,8 +190,25 @@ async function postAndRedirectToEcpay({ grand, email, entries }) {
   const API_BASE = (window.CONFIG && window.CONFIG.API_BASE) || 'http://localhost:3000'
 
   // 品名可簡化成「共 N 項商品」，或你要用實際品名以 # 串接也行
-  const itemName = `共 ${entries.length} 項商品`;
+  const itemName = `共 ${Array.isArray(entries) ? entries.length : 0} 項商品`;
 
+  // 取出你在送單前已存到 sessionStorage 的完整表單 + 購物車資訊
+  let order = {}
+  try {
+    order = JSON.parse(sessionStorage.getItem("checkoutPayload") || "{}")
+  }catch (_) {
+    order = {}
+  }
+
+  // 以防萬一，若 order.items 為空，回填這次傳入的 entries
+  if(!Array.isArray(order.items) || !order.items.length) {
+    order.items = Array.isArray(entries) ? entries: []
+  }
+
+  // 同步總金額
+  order.amount = grand
+
+  // 呼叫後端建立交易（後端會回一段自動 submit 的 <form> HTML）
   const resp = await fetch(`${API_BASE}/api/pay/ecpay/create`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -183,7 +216,8 @@ async function postAndRedirectToEcpay({ grand, email, entries }) {
       tradeNo,
       amount: grand,
       itemName,
-      email
+      email,
+      order
     })
   });
 
@@ -242,21 +276,25 @@ function renderCheckoutComplete(params) {
   const amt = params.get('amt') || '-';
   const msg = params.get('msg') || (ok ? '付款成功' : '付款未完成');
 
+  if (ok) {
+    clearCartAfterPayment();
+  }
+
   // 找一個 checkout 頁的主要容器來替換（依你 checkout.html 的結構挑選）
   const host = document.querySelector('#checkoutView') || document.querySelector('main') || document.body;
 
   host.innerHTML = `
-    <section class="checkout-complete" style="padding:2rem 1rem">
+    <section class="checkout-complete" style="padding:2rem 1rem; margin: 10em 0; display: flex; flex-direction: column; align-items: center;">
       <h1 style="margin-bottom:1rem">${ok ? '付款成功 🎉' : '付款未完成'}</h1>
       <p>${msg}</p>
-      <ul style="margin:1rem 0 2rem; line-height:1.8">
+      <ul style="margin:1rem 0 2rem; line-height:1.8;">
         <li>訂單編號：${orderNo}</li>
         <li>交易序號：${tradeNo}</li>
         <li>金額：${amt}</li>
       </ul>
-      <div style="display:flex; gap:.75rem">
-        <a class="btn" href="#/">回首頁</a>
-        <a class="btn" href="#checkout">回結帳</a>
+      <div style="display:flex; gap: 2rem;">
+        <a class="btn" href="#home" style="text-decoration: none;">回首頁</a>
+        <a class="btn" href="#checkout" style="text-decoration: none;">回結帳</a>
       </div>
     </section>
   `;

@@ -41,6 +41,13 @@ model Size {
   variant   Variant @relation(fields: [variantId], references: [id])
 }
 
+model StockSnapshot {
+  merchantTradeNo String   @id
+  itemsJson       String   // 存 [{id,color,size,qty}, ...] 的 JSON 字串
+  createdAt       DateTime @default(now())
+  processedAt     DateTime? // 第一次成功扣庫存的時間，避免重複扣
+}
+
 enum Season {
   SS
   FW

@@ -7,6 +7,7 @@ try { compression = require('compression'); }
 catch (_e) { compression = () => (req, res, next) => next(); }
 const productRoutes = require('./routes/productRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
+const debugRoutes = require('./routes/debugRoutes')
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use('/api/products', (req, res, _next) => {
 });
 
 app.use('/api/pay', paymentRoutes)
+
+app.use(debugRoutes)
 
 // （可選）最後的 404
 app.use((req, res) => res.status(404).json({ ok: false, path: req.originalUrl }));

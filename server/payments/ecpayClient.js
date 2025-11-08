@@ -47,7 +47,7 @@ function genCheckMacValue(params) {
   return crypto.createHash('sha256').update(encoded).digest('hex').toUpperCase();
 }
 
-function buildAioPayload({ tradeNo, amount, itemName, email, returnUrl, orderResultUrl, clientBackUrl }) {
+function buildAioPayload({ tradeNo, amount, itemName }) {
   const base = {
     MerchantID: MERCHANT_ID,
     MerchantTradeNo: tradeNo,
@@ -61,7 +61,6 @@ function buildAioPayload({ tradeNo, amount, itemName, email, returnUrl, orderRes
     ClientBackURL: process.env.ECPAY_CLIENT_BACK_URL,
     ChoosePayment: 'Credit',
     EncryptType: 1,
-    // 可按需加 Email / Remark 等欄位
   };
   return { ...base, CheckMacValue: genCheckMacValue(base) };
 }
