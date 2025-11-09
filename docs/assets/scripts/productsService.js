@@ -7,8 +7,9 @@
     window.CONFIG_READY = Promise.resolve()
   }
 
-  const IS_DEV = !/production/i.test(String(window.NODE_ENV || '')) && 
-  (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  // const IS_DEV = !/production/i.test(String(window.NODE_ENV || '')) && 
+  // (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  const IS_DEV = true
 
   function buildApiBase() {
     return window.CONFIG.API_BASE || 'http://localhost:3000';
@@ -102,38 +103,6 @@
       if (!prefix || String(k).startsWith(prefix)) memoryCache.delete(k)
     })
   }
-
-  // ---- 給 side cart 批次用：依 id 取展示 meta ----
-  // async function fetchByIds(ids = []) {
-  //   await window.CONFIG_READY;
-  //   const uniq = Array.from(new Set((ids || []).filter(Boolean)));
-  //   if (!uniq.length) return {};
-
-  //   const results = await Promise.all(
-  //     uniq.map(id => fetchProductById(id).catch(() => null))
-  //   );
-
-  //   const map = {};
-  //   results.forEach((p, i) => {
-  //     if (!p) return;
-  //     const id = uniq[i];
-  //     const firstVariant = p.variants?.[0];
-  //     const fallbackImg = firstVariant?.thumbnails?.[0] || 'assets/images/placeholder.png';
-
-  //     const images = {};
-  //     (p.variants || []).forEach(v => { images[v.color] = v.thumbnails?.[0] || fallbackImg; });
-
-  //     map[id] = {
-  //       title: p.title,
-  //       price: Number(p.price) || 0,
-  //       image: fallbackImg,
-  //       images,
-  //       currency: 'TWD',
-  //     };
-  //   });
-
-  //   return map;
-  // }
 
   async function fetchByIds(ids = []) {
     await window.CONFIG_READY;
