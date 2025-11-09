@@ -328,6 +328,11 @@ exports.notify = async (req, res) => {
 // 使用者端導回（OrderResultURL）→ 後端接 POST → 轉址到前端成功頁
 exports.resultForward = (req, res) => {
   try {
+    const src = {
+      ...(req.body || {}),
+      ...(req.query || {}),
+    }
+
     const {
       RtnCode,
       RtnMsg,
@@ -336,7 +341,7 @@ exports.resultForward = (req, res) => {
       TradeAmt,
       PaymentDate,
       PaymentType,
-    } = req.body || {};
+    } = src
 
     const success = String(RtnCode) === '1';
     const params = new URLSearchParams({

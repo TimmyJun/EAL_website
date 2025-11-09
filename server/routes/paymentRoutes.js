@@ -9,5 +9,6 @@ router.post('/ecpay/create', ctrl.createOrder)
 router.post('/ecpay/notify', ctrl.notify)
 
 router.post('/ecpay/result', ctrl.resultForward)
+router.get('/ecpay/result', ctrl.resultForward);
 
 module.exports = router
