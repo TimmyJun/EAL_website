@@ -1,5 +1,5 @@
 {
-  "ENV": "default",
+  "ENV": "staging",
   "API_BASE": "https://eal-website.vercel.app",
   "PUBLIC_BASE": "https://timmyjun.github.io/EAL_website/",
   "CACHE_VERSION": "v1-staging"

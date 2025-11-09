@@ -11,43 +11,88 @@ function normalizeSeasonFromType(type) {
   return t === 'SS' || t === 'FW' ? t : undefined;
 }
 
+function sortSizesOnProduct(product) {
+  if (!product || !Array.isArray(product.variants)) return product;
+
+  return {
+    ...product,
+    variants: product.variants.map((v) => ({
+      ...v,
+      sizes: Array.isArray(v.sizes)
+        ? [...v.sizes].sort((a, b) => Number(a.label) - Number(b.label))
+        : [],
+    })),
+  };
+}
+
+function sortSizesOnProducts(products) {
+  if (!Array.isArray(products)) return products;
+  return products.map(sortSizesOnProduct);
+}
+
 async function listProducts({ year, type } = {}) {
   const season = normalizeSeasonFromType(type);
   const where = {
     ...(year ? { year: Number(year) } : {}),
     ...(season ? { season } : {}),
-    // ...(published !== undefined ? { published } : {}),
   };
 
-  return prisma.product.findMany({
+  const rows = await prisma.product.findMany({
     where,
     orderBy: { createdAt: 'desc' },
-    include: { variants: { include: { sizes: true } } },
+    include: {
+      variants: {
+        include: { sizes: true },
+      },
+    },
   });
+
+  return sortSizesOnProducts(rows);
 }
 
 async function getAllProducts() {
-  return prisma.product.findMany({
+  const rows = await prisma.product.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { variants: { include: { sizes: true } } },
+    include: {
+      variants: {
+        include: { sizes: true },
+      },
+    },
   });
+
+  return sortSizesOnProducts(rows);
 }
 
 async function getProductById(id) {
-  return prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id },
-    include: { variants: { include: { sizes: true } } },
+    include: {
+      variants: {
+        include: {
+          sizes: true, // 這邊先單純拿出來
+        },
+      },
+    },
   });
+
+  return sortSizesOnProduct(product);
 }
 
 async function getProductsByIds(ids = []) {
   const uniq = [...new Set(ids)].filter(Boolean);
   if (!uniq.length) return [];
-  return prisma.product.findMany({
+
+  const rows = await prisma.product.findMany({
     where: { id: { in: uniq } },
     orderBy: { createdAt: 'desc' },
-    include: { variants: { include: { sizes: true } } },
+    include: {
+      variants: {
+        include: { sizes: true },
+      },
+    },
   });
+
+  return sortSizesOnProducts(rows);
 }
 
 // 取得去重的 (year, season) 清單
