@@ -7,17 +7,15 @@
     window.CONFIG_READY = Promise.resolve()
   }
 
-  // const IS_DEV = !/production/i.test(String(window.NODE_ENV || '')) && 
-  // (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-  const IS_DEV = true
+  const IS_DEV = !/production/i.test(String(window.NODE_ENV || '')) && 
+  (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
 
   function buildApiBase() {
     return window.CONFIG.API_BASE || 'http://localhost:3000';
   }
 
   function cacheMode(forceFresh = false) {
-    // 開發環境或明確要求新鮮 → 不用瀏覽器快取
-    return (IS_DEV || forceFresh) ? 'no-store' : 'force-cache';
+    return 'no-store';
   }
 
   function withTs(url, forceFresh = false) {
