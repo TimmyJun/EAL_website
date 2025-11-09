@@ -354,10 +354,13 @@ exports.resultForward = (req, res) => {
       payType: PaymentType || '',
     }).toString();
 
-    const successPage = getSuccessPage();
-    return res.redirect(`${successPage}?mode=complete&${params}`);
+    const successPage = getSuccessPage()
+    const redirectUrl = `${successPage}?mode=complete&${params}`
+    console.log('[ECPAY RESULT] redirecting with 303 to:', redirectUrl)
+    return res.redirect(303, redirectUrl)
   } catch (e) {
-    err('resultForward failed:', e?.message || e);
-    return res.redirect(`${getSuccessPage()}?mode=complete&s=0&msg=${encodeURIComponent('系統繁忙，請稍後查看訂單狀態')}`);
+    err('resultForward failed:', e?.message || e)
+    const fallbackUrl = `${getSuccessPage()}?mode=complete&s=0&msg=${encodeURIComponent('系統繁忙，請稍後查看訂單狀態')}`
+    return res.redirect(303, fallbackUrl)
   }
 };
