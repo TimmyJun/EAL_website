@@ -203,6 +203,12 @@ exports.createOrder = async (req, res) => {
       email
     })
 
+    console.log('[ECPAY payload URLs]', {
+      ReturnURL: payload.ReturnURL,
+      OrderResultURL: payload.OrderResultURL,
+      ClientBackURL: payload.ClientBackURL,
+    });
+
     // 3) 回傳「自動 submit 的表單 HTML」→ 前端同分頁寫入，導向收銀台
     res.type('html').send(`
       <html><body onload="document.forms[0].submit()">
