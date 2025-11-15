@@ -1,5 +1,5 @@
 const nt = new Intl.NumberFormat('zh-TW', { style: 'currency', currency: 'TWD', maximumFractionDigits: 0 });
-const SHIPPING_FEE = { pickup: 0, home: 80 };
+const SHIPPING_FEE = { pickup: 60, home: 100 };
 const q = (s) => document.querySelector(s);
 const qa = (s) => Array.from(document.querySelectorAll(s));
 
