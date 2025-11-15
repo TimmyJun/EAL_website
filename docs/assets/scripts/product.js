@@ -116,14 +116,25 @@
   }
 
   function renderSizeButtons(sizes) {
+    // 先找出第一個有庫存的 index
+    let firstEnabledIdx = -1;
+    (sizes || []).forEach((s, idx) => {
+      const stock = Math.max(0, Number(s.stock) || 0);
+      if (stock > 0 && firstEnabledIdx === -1) {
+        firstEnabledIdx = idx;
+      }
+    });
+
     return (sizes || []).map((s, idx) => {
       const stock = Math.max(0, Number(s.stock) || 0);
       const disabled = stock <= 0;
       const cls = [
         'size-option',
-        idx === 0 ? 'size-active' : '',
+        // ✅ 只有第一個有庫存的才預設 active
+        idx === firstEnabledIdx ? 'size-active' : '',
         disabled ? 'size-disabled' : '',
       ].filter(Boolean).join(' ');
+
       return `<button class="${cls}" data-size="${s.label}" ${disabled ? 'disabled' : ''}>${s.label}</button>`;
     }).join('');
   }
