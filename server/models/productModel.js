@@ -8,7 +8,7 @@ if (!globalThis.__PRISMA__) globalThis.__PRISMA__ = prisma;
 function normalizeSeasonFromType(type) {
   if (!type) return undefined;
   const t = String(type).toUpperCase();
-  return t === 'SS' || t === 'FW' ? t : undefined;
+  return ['SS', 'FW', 'AW'].includes(t) ? t : undefined;
 }
 
 function sortSizesOnProduct(product) {

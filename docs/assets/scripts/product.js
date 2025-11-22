@@ -1,7 +1,7 @@
 (() => {
   const QTY_MIN = 1;
   const QTY_MAX = 99;
-  const PLACEHOLDER_IMG = 'assets/images/placeholder.png';
+  const PLACEHOLDER_IMG = 'assets/images/placeholder.jpg';
 
   const SEL = {
     pageRoot: '.product-container',

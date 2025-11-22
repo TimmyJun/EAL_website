@@ -1,7 +1,7 @@
 function renderProductsHTML(products = []) {
   return products.map(p => {
     const v = p.variants?.[0];
-    const img = v?.thumbnails?.[0] || 'assets/images/placeholder.png';
+    const img = v?.thumbnails?.[0] || 'assets/images/placeholder.jpg';
     const price = (typeof p.price === 'number' && p.price > 0)
       ? `NT$${p.price.toLocaleString()}`
       : '—';
@@ -9,7 +9,7 @@ function renderProductsHTML(products = []) {
       <div class="product-card">
         <div class="product-container">
           <a href="#product?id=${p.id}">
-            <img src="${img}" alt="${p.title}" onerror="this.src='assets/images/placeholder.png'">
+            <img src="${img}" alt="${p.title}" onerror="this.src='assets/images/placeholder.jpg'">
           </a>
           <h3 class="product-name">${p.title}</h3>
           <span class="product-price">${price}</span>

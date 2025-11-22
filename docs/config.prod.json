@@ -1,0 +1,6 @@
+{
+  "ENV": "prod",
+  "API_BASE": "https://api.eal.com.tw", 
+  "PUBLIC_BASE": "https://shop.eal.com.tw",
+  "CACHE_VERSION": "v1-prod"
+}
