@@ -1,6 +1,6 @@
 {
   "ENV": "prod",
-  "API_BASE": "https://api.eal.com.tw", 
-  "PUBLIC_BASE": "https://shop.eal.com.tw",
+  "API_BASE": "https://etrealouest.com/", 
+  "PUBLIC_BASE": "https://etrealouest.com/",
   "CACHE_VERSION": "v1-prod"
 }
