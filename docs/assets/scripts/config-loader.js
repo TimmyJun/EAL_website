@@ -20,14 +20,14 @@ window.CONFIG_READY = (async () => {
 
   if (host === "timmyjun.github.io") {
     configUrl = "./config.staging.json"
-  }else if (host === "eal.com.tw") {
+  }else if (host === "eal.com.tw" || host === "57.182.251.209") {
     configUrl = "./config.prod.json"
   }else {
-    configUrl = "./config.json"
+    configUrl = "./config.prod.json"
   }
 
   try {
-    const cfg = await load("./config.json")
+    const cfg = await load(configUrl)
     Object.assign(window.CONFIG, cfg)
     console.log("[config] loaded", configUrl, window.CONFIG)
   } catch (e) {
