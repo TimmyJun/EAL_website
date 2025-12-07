@@ -20,7 +20,7 @@ window.CONFIG_READY = (async () => {
 
   if (host === "timmyjun.github.io") {
     configUrl = "./config.staging.json"
-  }else if (host === "eal.com.tw" || host === "57.182.251.209") {
+  } else if (host === "etrealouest.com" || host === "57.182.251.209") {
     configUrl = "./config.prod.json"
   }else {
     configUrl = "./config.prod.json"
