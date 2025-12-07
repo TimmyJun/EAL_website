@@ -1,6 +1,6 @@
 {
   "ENV": "prod",
-  "API_BASE": "https://etrealouest.com/", 
-  "PUBLIC_BASE": "https://etrealouest.com/",
+  "API_BASE": "https://etrealouest.com", 
+  "PUBLIC_BASE": "https://etrealouest.com",
   "CACHE_VERSION": "v1-prod"
 }
