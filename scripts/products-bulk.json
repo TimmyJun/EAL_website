@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "tight-fit-tee",
+    "title": "Tight Fit Tee",
+    "price": 1680,
+    "year": 2025,
+    "season": "SS",
+    "description": "這裡放你的商品描述...",
+    "variants": [
+      {
+        "color": "white",
+        "colorCode": "#FFFFFF",
+        "imageFiles": [
+          "25ss_white.jpg",
+          "25ss_white_back.jpg"
+        ],
+        "sizes": [
+          {
+            "label": "1",
+            "stock": 10
+          },
+          {
+            "label": "2",
+            "stock": 6
+          },
+          {
+            "label": "3",
+            "stock": 6
+          }
+        ]
+      },
+      {
+        "color": "black",
+        "colorCode": "#000000",
+        "imageFiles": [
+          "25ss_black.jpg",
+          "25ss_black_back.jpg"
+        ],
+        "sizes": [
+          {
+            "label": "1",
+            "stock": 10
+          },
+          {
+            "label": "2",
+            "stock": 6
+          },
+          {
+            "label": "3",
+            "stock": 6
+          }
+        ]
+      }
+    ]
+  }
+]
