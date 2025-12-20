@@ -32,7 +32,6 @@ build/
 generated/
 .prisma/
 node_modules/.prisma/
-seed-images/
 
 # Misc
 *.local
