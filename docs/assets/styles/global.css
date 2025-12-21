@@ -101,6 +101,27 @@ nav {
   z-index: 10000;
 }
 
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 8000;
+}
+
+/* menu hover 時顯示（桌機） */
+nav:hover~.menu-backdrop {
+  opacity: 1;
+}
+
+/* menu 開啟時顯示（桌機 + 手機） */
+.menu-backdrop.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* 顯示狀態 */
 .overlay-menu.open {
   opacity: 1;

@@ -1,8 +1,8 @@
 const menuToggleBtn = document.getElementById('menu-toggle');
 const overlayMenu = document.getElementById('overlay-menu');
 const closeBtn = document.getElementById('close-btn');
-
 const shopItems = document.querySelector('.shop-items');
+const menuBackdrop = document.getElementById('menuBackdrop');
 
 function setOverlayPositionFrom(el) {
   if (!overlayMenu || !el) return;
@@ -12,8 +12,9 @@ function setOverlayPositionFrom(el) {
 }
 
 function closeAllMenus() {
-  overlayMenu?.classList.remove('open');
-  menuToggleBtn?.classList.remove('open');
+  overlayMenu?.classList.remove('open')
+  menuToggleBtn?.classList.remove('open')
+  menuBackdrop?.classList.remove('is-active')
 
   document.querySelectorAll('.submenu.open').forEach((ul) => {
     ul.classList.remove('open');
@@ -22,10 +23,11 @@ function closeAllMenus() {
 }
 
 function openOverlay() {
-  if (!menuToggleBtn || !overlayMenu) return;
-  setOverlayPositionFrom(menuToggleBtn);
-  overlayMenu.classList.add('open');
-  menuToggleBtn.classList.add('open');
+  if (!menuToggleBtn || !overlayMenu) return
+  setOverlayPositionFrom(menuToggleBtn)
+  overlayMenu.classList.add('open')
+  menuToggleBtn.classList.add('open')
+  menuBackdrop?.classList.add('is-active')
 }
 
 function toggleOverlay() {
