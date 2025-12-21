@@ -19,12 +19,7 @@ const productDefs = [
         color: "Black",
         colorCode: "#111111",
         imageFiles: [
-          "cap-photo-1.png",
-          "cap-photo-2.png",
-          "cap-photo-3.png",
-          "cap-photo-4.png",
-          "cap-photo-5.png",
-          "cap-photo-6.png"
+          "cap-photo-7.png"
         ],
         sizes: [
           { label: "1", stock: 9 }
