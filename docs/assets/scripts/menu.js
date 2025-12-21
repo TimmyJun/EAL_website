@@ -3,15 +3,17 @@ const overlayMenu = document.getElementById('overlay-menu');
 const closeBtn = document.getElementById('close-btn');
 const shopToggle = document.getElementById('shop-toggle');
 const shopItems = document.querySelector('.shop-items');
-const submenu = document.querySelector('.submenu');
+// const submenu = document.querySelector('.submenu');
+const lookbookToggle = document.querySelector('.lookbook-toggle');
 
 function closeAllMenus() {
-  overlayMenu?.classList.remove('open');
-  menuToggle?.classList.remove('open');
-  if (submenu) {
-    submenu.classList.remove('open');
-    submenu.style.maxHeight = '0px';
-  }
+  overlayMenu?.classList.remove('open')
+  menuToggle?.classList.remove('open')
+
+  document.querySelectorAll('.submenu.open').forEach((el) => {
+    el.classList.remove('open');
+    el.style.maxHeight = '0px';
+  });
 }
 function toggleOverlay() {
   if (!menuToggle || !overlayMenu) return;
@@ -30,7 +32,8 @@ function toggleSubmenu() {
 window.addEventListener('pageshow', closeAllMenus);
 menuToggle?.addEventListener('click', toggleOverlay);
 closeBtn?.addEventListener('click', closeAllMenus);
-shopToggle?.addEventListener('click', toggleSubmenu);
+// shopToggle?.addEventListener('click', toggleSubmenu);
+shopToggle?.addEventListener('click', () => toggleSubmenuByToggle(shopToggle));
 overlayMenu?.addEventListener('click', (e) => { if (e.target.closest('a')) closeAllMenus(); });
 
 function renderShopItems(tags = []) {
@@ -52,6 +55,18 @@ function renderShopItems(tags = []) {
     shopItems.appendChild(li);
   }
 }
+
+function toggleSubmenuByToggle(toggleEl) {
+  const submenu = toggleEl.nextElementSibling;
+  if (!submenu || !submenu.classList.contains('submenu')) return;
+
+  const opened = submenu.classList.toggle('open');
+  submenu.style.maxHeight = opened ? `${submenu.scrollHeight}px` : '0px';
+}
+
+lookbookToggle?.addEventListener('click', () =>
+  toggleSubmenuByToggle(lookbookToggle)
+);
 
 async function initShopMenuItems() {
   try {

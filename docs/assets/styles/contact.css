@@ -1,0 +1,47 @@
+.container {
+  margin: 200px auto;
+  width: 80%;
+}
+
+.container #page-title {
+  text-align: center;
+}
+
+.dealer-container {
+  display: flex;
+  align-items: start;
+  justify-content: space-around;
+}
+
+.region h3{
+  text-align: center;
+  font-weight: bold;
+}
+
+#dealers {
+  text-align: center;
+  list-style: none;
+  padding: 0;
+  height: 100%;
+}
+
+#dealer {
+  text-align: center;
+  text-decoration: none;
+  padding: 20px;
+}
+
+#dealer a{
+  text-decoration: none;
+  color: black
+}
+
+#dealer a:hover {
+  color: #337ab7;
+}
+
+@media screen and (max-width: 500px) {
+.dealer-container {
+   margin-top: 50px;
+  }
+}

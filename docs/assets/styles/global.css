@@ -131,7 +131,8 @@ nav {
 }
 
 .overlay-menu a:hover,
-.shop-toggle:hover {
+.shop-toggle:hover,
+.lookbook-toggle:hover {
   color: gray;
 }
 
@@ -388,6 +389,7 @@ footer a {
   .submenu {
     align-items: center;
     justify-content: center;
+    padding: 0;
   }
 
   .close-btn {
