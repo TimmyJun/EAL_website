@@ -1,43 +1,65 @@
-const menuToggle = document.getElementById('menu-toggle');
+const menuToggleBtn = document.getElementById('menu-toggle');
 const overlayMenu = document.getElementById('overlay-menu');
 const closeBtn = document.getElementById('close-btn');
-const shopToggle = document.getElementById('shop-toggle');
+
 const shopItems = document.querySelector('.shop-items');
-// const submenu = document.querySelector('.submenu');
-const lookbookToggle = document.querySelector('.lookbook-toggle');
 
-function closeAllMenus() {
-  overlayMenu?.classList.remove('open')
-  menuToggle?.classList.remove('open')
-
-  document.querySelectorAll('.submenu.open').forEach((el) => {
-    el.classList.remove('open');
-    el.style.maxHeight = '0px';
-  });
-}
-function toggleOverlay() {
-  if (!menuToggle || !overlayMenu) return;
-  const rect = menuToggle.getBoundingClientRect();
+function setOverlayPositionFrom(el) {
+  if (!overlayMenu || !el) return;
+  const rect = el.getBoundingClientRect();
   overlayMenu.style.setProperty('--menuTop', `${rect.top}px`);
   overlayMenu.style.setProperty('--menuLeft', `${rect.left}px`);
-  overlayMenu.classList.toggle('open');
-  menuToggle.classList.toggle('open');
 }
-function toggleSubmenu() {
-  if (!submenu) return;
+
+function closeAllMenus() {
+  overlayMenu?.classList.remove('open');
+  menuToggleBtn?.classList.remove('open');
+
+  document.querySelectorAll('.submenu.open').forEach((ul) => {
+    ul.classList.remove('open');
+    ul.style.maxHeight = '0px';
+  });
+}
+
+function openOverlay() {
+  if (!menuToggleBtn || !overlayMenu) return;
+  setOverlayPositionFrom(menuToggleBtn);
+  overlayMenu.classList.add('open');
+  menuToggleBtn.classList.add('open');
+}
+
+function toggleOverlay() {
+  if (!overlayMenu?.classList.contains('open')) openOverlay();
+  else closeAllMenus();
+}
+
+/**
+ * Toggle a submenu under a toggle element.
+ * Expected DOM structure:
+ * <div class="menu-toggle-item">...</div>
+ * <ul class="submenu">...</ul>
+ */
+function toggleSubmenu(toggleEl, { closeOthers = true } = {}) {
+  const submenu = toggleEl?.nextElementSibling;
+  if (!submenu || !submenu.classList.contains('submenu')) return;
+
+  // Optional: accordion behavior (only one open at a time)
+  if (closeOthers) {
+    document.querySelectorAll('.submenu.open').forEach((ul) => {
+      if (ul !== submenu) {
+        ul.classList.remove('open');
+        ul.style.maxHeight = '0px';
+      }
+    });
+  }
+
   const opened = submenu.classList.toggle('open');
   submenu.style.maxHeight = opened ? `${submenu.scrollHeight}px` : '0px';
 }
 
-window.addEventListener('pageshow', closeAllMenus);
-menuToggle?.addEventListener('click', toggleOverlay);
-closeBtn?.addEventListener('click', closeAllMenus);
-// shopToggle?.addEventListener('click', toggleSubmenu);
-shopToggle?.addEventListener('click', () => toggleSubmenuByToggle(shopToggle));
-overlayMenu?.addEventListener('click', (e) => { if (e.target.closest('a')) closeAllMenus(); });
-
 function renderShopItems(tags = []) {
   if (!shopItems) return;
+
   shopItems.innerHTML = '';
   for (const t of tags) {
     const year = t.year;
@@ -56,18 +78,6 @@ function renderShopItems(tags = []) {
   }
 }
 
-function toggleSubmenuByToggle(toggleEl) {
-  const submenu = toggleEl.nextElementSibling;
-  if (!submenu || !submenu.classList.contains('submenu')) return;
-
-  const opened = submenu.classList.toggle('open');
-  submenu.style.maxHeight = opened ? `${submenu.scrollHeight}px` : '0px';
-}
-
-lookbookToggle?.addEventListener('click', () =>
-  toggleSubmenuByToggle(lookbookToggle)
-);
-
 async function initShopMenuItems() {
   try {
     if (!window.productService?.fetchSeasonTags) return;
@@ -75,9 +85,28 @@ async function initShopMenuItems() {
     renderShopItems(tags);
   } catch (err) {
     console.error('[shop-items] load error:', err);
-    if (shopItems) shopItems.innerHTML = '';
+    shopItems && (shopItems.innerHTML = '');
   }
 }
 
-window.addEventListener('DOMContentLoaded', initShopMenuItems)
-window.addEventListener('pageshow', initShopMenuItems)
+// ---------- Events ----------
+window.addEventListener('pageshow', closeAllMenus);
+window.addEventListener('DOMContentLoaded', initShopMenuItems);
+window.addEventListener('pageshow', initShopMenuItems);
+
+menuToggleBtn?.addEventListener('click', toggleOverlay);
+closeBtn?.addEventListener('click', closeAllMenus);
+
+// One listener for everything inside the overlay menu
+overlayMenu?.addEventListener('click', (e) => {
+  const toggleEl = e.target.closest('.menu-toggle-item');
+  if (toggleEl) {
+    toggleSubmenu(toggleEl, { closeOthers: true });
+    return;
+  }
+
+  // Clicked a link -> close overlay
+  if (e.target.closest('a')) {
+    closeAllMenus();
+  }
+});

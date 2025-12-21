@@ -131,8 +131,7 @@ nav {
 }
 
 .overlay-menu a:hover,
-.shop-toggle:hover,
-.lookbook-toggle:hover {
+.menu-toggle-item:hover {
   color: gray;
 }
 
@@ -187,6 +186,16 @@ footer .links {
 footer a {
   text-decoration: none;
   color: #000;
+}
+
+.info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.info span {
+  text-align: center;
 }
 
 .copyright {
@@ -387,9 +396,8 @@ footer a {
   }
 
   .submenu {
-    align-items: center;
-    justify-content: center;
     padding: 0;
+    text-align: center;
   }
 
   .close-btn {
