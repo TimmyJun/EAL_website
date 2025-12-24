@@ -416,6 +416,10 @@ footer a {
     text-align: center;
   }
 
+  .menu-backdrop {
+    display: none;
+  }
+
   .submenu {
     padding: 0;
     text-align: center;
