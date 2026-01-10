@@ -130,6 +130,7 @@
   .lookbooks {
     flex-direction: column;
     height: 700px;
+    overflow: hidden;
     margin: 150px auto 20px auto;
   }
 }
