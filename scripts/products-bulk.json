@@ -1,31 +1,58 @@
 [
   {
-    "slug": "tight-fit-tee",
-    "title": "Tight Fit Tee",
-    "price": 1680,
-    "year": 2025,
+    "slug": "Mess-Words-Tee",
+    "title": "Mess Words Tee",
+    "price": 1180,
+    "year": 2023,
     "season": "SS",
-    "description": "這裡放你的商品描述...",
+    "description": `
+   * Handwritten font Logo words <br>
+* Loose Fit <br>
+* 100% Cotton<br>
+<br>
+* 草寫文字字體<br>
+* 寬鬆版型<br>
+* 100% 棉材質<br>
+<br>
+* Size 1<br>
+胸寬 Chest - 60cm<br>
+衣長 Length - 68cm<br>
+肩寬 Shoulder - 57cm<br>
+<br>
+* Size 2<br>
+胸寬 Chest - 63cm<br>
+衣長 Length - 71cm<br>
+肩寬 Shoulder - 59cm<br>
+<br>
+* Size 3<br>
+胸寬 Chest - 66cm<br>
+衣長 Length - 74cm<br>
+肩寬 Shoulder - 61cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
     "variants": [
       {
         "color": "white",
         "colorCode": "#FFFFFF",
         "imageFiles": [
-          "25ss_white.jpg",
-          "25ss_white_back.jpg"
+          "2023SS白色草寫短袖-01.jpg",
+          "2023SS白色草寫短袖-02.jpg",
+          "2023SS白色草寫短袖-03.jpg",
+          "2023SS白色草寫短袖-04.jpg"
         ],
         "sizes": [
           {
             "label": "1",
-            "stock": 10
+            "stock": 0
           },
           {
             "label": "2",
-            "stock": 6
+            "stock": 0
           },
           {
             "label": "3",
-            "stock": 6
+            "stock": 0
           }
         ]
       },
@@ -33,21 +60,23 @@
         "color": "black",
         "colorCode": "#000000",
         "imageFiles": [
-          "25ss_black.jpg",
-          "25ss_black_back.jpg"
+        "2023SS黑色草寫短袖-01.jpg",
+        "2023SS黑色草寫短袖-02.jpg",
+        "2023SS黑色草寫短袖-03.jpg",
+        "2023SS黑色草寫短袖-04.jpg"
         ],
         "sizes": [
           {
             "label": "1",
-            "stock": 10
+            "stock": 0
           },
           {
             "label": "2",
-            "stock": 6
+            "stock": 0
           },
           {
             "label": "3",
-            "stock": 6
+            "stock": 0
           }
         ]
       }
