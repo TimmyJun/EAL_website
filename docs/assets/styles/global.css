@@ -254,6 +254,7 @@ footer a {
   display: grid;
   grid-template-rows: auto 1fr auto;
   z-index: 9999;
+  height: 100dvh;
 }
 
 .cart-panel.is-open {
@@ -442,6 +443,7 @@ footer a {
     right: auto;
     transform: translateX(100%);
     height: 90vh;
+    height: 90svh;
   }
 
   .cart-panel.is-open {
