@@ -246,14 +246,16 @@ footer a {
   top: 0;
   right: 0;
   height: 100vh;
+  height: 100svh;
   width: min(550px, 90vw);
   background: #fff;
   box-shadow: -2px 0 12px rgba(0, 0, 0, .12);
   transform: translateX(100%);
   transition: transform .25s ease;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
   z-index: 9999;
+  overflow: hidden;
   height: 100dvh;
 }
 
@@ -268,9 +270,7 @@ footer a {
 }
 
 .cart-panel-header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  flex-shrink: 0;
 }
 
 .cart-panel-header .icon-btn {
@@ -283,13 +283,20 @@ footer a {
 }
 
 .cart-panel-footer {
+  flex-shrink: 0;
   border-top: 1px solid #eee;
   border-bottom: 0;
+  padding: 16px;
 }
 
 .cart-panel-items {
+  flex: 1;
+  /* ← 撐滿中間空間 */
+  overflow-y: auto;
+  /* ← 允許垂直滾動 */
   padding: 12px 16px;
-  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  /* ← iOS 慣性滾動 */
 }
 
 .cart-item {
