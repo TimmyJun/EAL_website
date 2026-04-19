@@ -1,230 +1,131 @@
 const productDefs = [
   {
-    "slug": "Round-Neck-Tee ",
-    "title": "Round Neck Tee",
-    "price": 1280,
-    "year": 2023,
+    "slug": "Logo-Vintage-Destroyed-Tee",
+    "title": "Logo Vintage Destroyed Tee",
+    "price": 1480,
+    "year": 2024,
     "season": "SS",
     "description": `
-   * Collars in different colors <br>
-* Loose Fit <br>
-* 100% Cotton<br>
-<br>
-* 領子撞色設計<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
+  * Crop and Slim fit <br>
+* Destroyed design on both front and back <br>
+* Large surface of DTF printing on the front <br>
+* 100% Cotton and Linen Fabrics<br>
 <br>
 * Size 1<br>
-胸寬 Chest - 60cm<br>
-衣長 Length - 68cm<br>
-肩寬 Shoulder - 57cm<br>
+胸圍 Chest - 59cm<br>
+衣長 Length - 63cm<br>
+袖長 Sleeve - 36cm<br>
 <br>
 * Size 2<br>
-胸寬 Chest - 63cm<br>
-衣長 Length - 71cm<br>
-肩寬 Shoulder - 59cm<br>
+胸圍 Chest - 61cm<br>
+衣長 Length - 66cm<br>
+袖長 Sleeve - 37cm<br>
 <br>
 * Size 3<br>
-胸寬 Chest - 66cm<br>
-衣長 Length - 74cm<br>
-肩寬 Shoulder - 61cm<br>
+胸圍 Chest - 63cm<br>
+衣長 Length - 69cm<br>
+袖長 Sleeve - 38cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "white",
-        "colorCode": "#FFFFFF",
+        "color": "Vintage Black",
+        "colorCode": "#888888",
         "imageFiles": [
-          "2023SS黑色領子短袖-01.jpg",
-          "2023SS黑色領子短袖-02.jpg",
-          "2023SS黑色領子短袖-03.jpg",
-          "2023SS黑色領子短袖-04.jpg"
-        ],
-        sizes: [
-          { label: "1", stock: 0 },
-          { label: "2", stock: 3 },
-          { label: "3", stock: 0 }
-        ]
-      },
-      {
-        "color": "black",
-        "colorCode": "#000000",
-        "imageFiles": [
-          "2023SS白色領子短袖-01.jpg",
-          "2023SS白色領子短袖-02.jpg",
-          "2023SS白色領子短袖-03.jpg",
-          "2023SS白色領子短袖-04.jpg"
+          "2024SS黑色水洗logo短袖-01.jpg",
+          "2024SS黑色水洗logo短袖-02.jpg",
+          "2024SS黑色水洗logo短袖-03.jpg",
+          "2024SS黑色水洗logo短袖-04.jpg",
+          "2024SS黑色水洗logo短袖-05.jpg",
+          "2024SS黑色水洗logo短袖-06.jpg"
         ],
         sizes: [
           { label: "1", stock: 1 },
-          { label: "2", stock: 0 },
-          { label: "3", stock: 0 }
-        ]
-      }
-    ]
-  },
-  {
-    "slug": "Classic-EAL-Tee",
-    "title": "Classic EAL Tee",
-    "price": 1180,
-    "year": 2023,
-    "season": "SS",
-    "description": `
-  * EAL classic fonts design. <br>
-* Loose Fit <br>
-* 100% Cotton<br>
-<br>
-* 經典Logo設計<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
-<br>
-* Size 1<br>
-胸寬 Chest - 60cm<br>
-衣長 Length - 68cm<br>
-肩寬 Shoulder - 57cm<br>
-<br>
-* Size 2<br>
-胸寬 Chest - 63cm<br>
-衣長 Length - 71cm<br>
-肩寬 Shoulder - 59cm<br>
-<br>
-* Size 3<br>
-胸寬 Chest - 66cm<br>
-衣長 Length - 74cm<br>
-肩寬 Shoulder - 61cm<br>
-<br>
-* 尺寸皆為商品平量數據 單位皆為公分 *<br>
-* Measurements are all in centimeters *`,
-    "variants": [
-      {
-        "color": "black",
-        "colorCode": "#000000",
-        "imageFiles": [
-          "2023SS黑色EAL短袖-01.jpg",
-          "2023SS黑色EAL短袖-02.jpg",
-          "2023SS黑色EAL短袖-03.jpg",
-          "2023SS黑色EAL短袖-04.jpg",
-          "2023SS黑色EAL短袖-05.jpg",
-        ],
-        sizes: [
-          { label: "1", stock: 15 },
           { label: "2", stock: 10 },
-          { label: "3", stock: 2 }
+          { label: "3", stock: 6 }
         ]
       },
       {
-        "color": "white",
+        "color": "Vintage White",
         "colorCode": "#FFFFFF",
         "imageFiles": [
-          "2023SS白色EAL短袖-01.jpg",
-          "2023SS白色EAL短袖-02.jpg",
-          "2023SS白色EAL短袖-03.jpg",
-          "2023SS白色EAL短袖-04.jpg",
-        ],
-        sizes: [
-          { label: "1", stock: 13 },
-          { label: "2", stock: 9 },
-          { label: "3", stock: 2 }
-        ]
-      }
-    ]
-  },
-  {
-    "slug": "White-Line-Tee",
-    "title": "White Line Tee",
-    "price": 1280,
-    "year": 2023,
-    "season": "SS",
-    "description": `
-  * White Line at the front <br>
-* Loose Fit <br>
-* 100% Cotton<br>
-<br>
-* 白色貫穿線在胸前<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
-<br>
-* Size 1<br>
-胸寬 Chest - 60cm<br>
-衣長 Length - 68cm<br>
-肩寬 Shoulder - 57cm<br>
-<br>
-* Size 2<br>
-胸寬 Chest - 63cm<br>
-衣長 Length - 71cm<br>
-肩寬 Shoulder - 59cm<br>
-<br>
-* Size 3<br>
-胸寬 Chest - 66cm<br>
-衣長 Length - 74cm<br>
-肩寬 Shoulder - 61cm<br>
-<br>
-* 尺寸皆為商品平量數據 單位皆為公分 *<br>
-* Measurements are all in centimeters *`,
-    "variants": [
-      {
-        "color": "grey",
-        "colorCode": "#808080",
-        "imageFiles": [
-          "2023SS灰色line短袖-01.jpg",
-          "2023SS灰色line短袖-02.jpg",
-          "2023SS灰色line短袖-03.jpg",
-          "2023SS灰色line短袖-04.jpg",
-          "2023SS灰色line短袖-05.jpg",
+          "2024SS白色水洗logo短袖-01.jpg",
+          "2024SS白色水洗logo短袖-02.jpg",
+          "2024SS白色水洗logo短袖-03.jpg",
+          "2024SS白色水洗logo短袖-04.jpg",
+          "2024SS白色水洗logo短袖-05.jpg",
+          "2024SS白色水洗logo短袖-06.jpg"
         ],
         sizes: [
           { label: "1", stock: 2 },
-          { label: "2", stock: 0 },
-          { label: "3", stock: 0 }
+          { label: "2", stock: 27 },
+          { label: "3", stock: 20 }
         ]
       }
     ]
   },
   {
-    "slug": "Logo-Knit-Vest",
-    "title": "Logo Knit Vest",
-    "price": 1680,
-    "year": 2023,
+    "slug": "Dept-Vintage-Destroyed-Tee",
+    "title": "Dept Vintage Destroyed Tee",
+    "price": 1480,
+    "year": 2024,
     "season": "SS",
     "description": `
-  * Slightly Fit <br>
-* Classic logo design with logo pattern on the back <br>
-* Round neckline with adjustable metal buttons <br>
-* Using the YKK zipper <br>
-* Two inside pockets<br>
-<br>
-* 白色貫穿線在胸前<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
+  * Crop and Slim fit <br>
+* Destroyed design on both front and back <br>
+* Large surface of DTF printing on both side<br>
 <br>
 * Size 1<br>
-身長 Length - 70cm<br>
-胸寬 Chest - 59cm<br>
-肩寬 Shoulder - 44cm<br>
+胸圍 Chest - 59cm<br>
+衣長 Length - 63cm<br>
+袖長 Sleeve - 36cm<br>
 <br>
 * Size 2<br>
-身長 Length - 75cm<br>
-胸寬 Chest - 64cm<br>
-肩寬 Shoulder - 49cm<br>
+胸圍 Chest - 61cm<br>
+衣長 Length - 66cm<br>
+袖長 Sleeve - 37cm<br>
+<br>
+* Size 3<br>
+胸圍 Chest - 63cm<br>
+衣長 Length - 69cm<br>
+袖長 Sleeve - 38cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "yellow",
-        "colorCode": "#e2bc3e",
+        "color": "Vintage Black",
+        "colorCode": "#888888",
         "imageFiles": [
-          "2023SS黃色拉鍊背心-01.jpg",
-          "2023SS黃色拉鍊背心-02.jpg",
-          "2023SS黃色拉鍊背心-03.jpg",
-          "2023SS黃色拉鍊背心-04.jpg",
-          "2023SS黃色拉鍊背心-05.jpg",
-          "2023SS黃色拉鍊背心-06.jpg",
+          "2024SS黑色水洗dept短袖-01.jpg",
+          "2024SS黑色水洗dept短袖-02.jpg",
+          "2024SS黑色水洗dept短袖-03.jpg",
+          "2024SS黑色水洗dept短袖-04.jpg",
+          "2024SS黑色水洗dept短袖-05.jpg",
+          "2024SS黑色水洗dept短袖-06.jpg",
         ],
         sizes: [
-          { label: "1", stock: 5 },
-          { label: "2", stock: 13 }
+          { label: "1", stock: 0 },
+          { label: "2", stock: 0 },
+          { label: "3", stock: 11 }
+        ]
+      },
+      {
+        "color": "Vintage White",
+        "colorCode": "#FFFFFF",
+        "imageFiles": [
+          "2024SS白色水洗dept短袖-01.jpg",
+          "2024SS白色水洗dept短袖-02.jpg",
+          "2024SS白色水洗dept短袖-03.jpg",
+          "2024SS白色水洗dept短袖-04.jpg",
+          "2024SS白色水洗dept短袖-05.jpg",
+          "2024SS白色水洗dept短袖-06.jpg",
+        ],
+        sizes: [
+          { label: "1", stock: 0 },
+          { label: "2", stock: 17 },
+          { label: "3", stock: 28 }
         ]
       }
     ]
