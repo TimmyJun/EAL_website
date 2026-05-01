@@ -1,64 +1,75 @@
 const productDefs = [
   {
-    "slug": "Reversed-Baggy-Double-Knees-Jeans",
-    "title": "Reversed Baggy Double Knees Jeans",
-    "price": 3280,
-    "year": 2025,
+    "slug": "Hole-Knit-Double-Zipper-Sweater",
+    "title": "Hole Knit Double Zipper Sweater",
+    "price": 1880,
+    "year": 2026,
     "season": "SS",
     "description": `
-  * Baggy Loose fit <br>
-* Logo leather tag <br>
-* Reversed pocket <br>
-* Double Knees <br>
-* Destroy design<br>
+  * Regular fit <br>
+* Double Zipper <br>
+* Hole Knit <br>
+* 100% Cotton<br>
 <br>
-* 寬鬆寬褲版型<br>
-* 五金皮牌<br>
-* 反面口袋<br>
-* 雙膝蓋<br>
-* 破壞做舊<br>
-<br>
-* Size 0（WMS 女碼）<br>
-腰圍 Waist - 70cm<br>
-大腿 Thigh - 35cm<br>
-褲長 Length - 102cm<br>
+* 常規版型<br>
+* 雙拉鍊<br>
+* 網洞針織<br>
+* 100% 棉材質<br>
 <br>
 * Size 1<br>
-腰圍 Waist - 78cm<br>
-大腿 Thigh - 36cm<br>
-褲長 Length - 106cm<br>
+胸圍 Chest - 63cm<br>
+衣長 Length - 54cm<br>
+袖長 Sleeve - 66cm<br>
 <br>
 * Size 2<br>
-腰圍 Waist - 82cm<br>
-大腿 Thigh - 37cm<br>
-褲長 Length - 108cm<br>
-<br>
-* Size 3<br>
-腰圍 Waist - 86cm<br>
-大腿 Thigh - 38cm<br>
-褲長 Length - 110cm<br>
+胸圍 Chest - 67cm<br>
+衣長 Length - 60cm<br>
+袖長 Sleeve - 70cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "Washed Blue",
-        "colorCode": "#2f4a80",
+        "color": "Black",
+        "colorCode": "#000000",
         "imageFiles": [
-          "2025SS藍色牛仔褲-01.png",
-          "2025SS藍色牛仔褲-02.png",
-          "2025SS藍色牛仔褲-03.png",
-          "2025SS藍色牛仔褲-04.png",
-          "2025SS藍色牛仔褲-05.png",
-          "2025SS藍色牛仔褲-06.png",
-          "2025SS藍色牛仔褲-07.png",
-          "2025SS藍色牛仔褲-08.png"
+          "2025FW黑色洞洞拉鍊毛衣-01.png",
+          "2025FW黑色洞洞拉鍊毛衣-02.png",
+          "2025FW黑色洞洞拉鍊毛衣-03.png",
+          "2025FW黑色洞洞拉鍊毛衣-04.png",
+          "2025FW黑色洞洞拉鍊毛衣-05.png",
+          "2025FW黑色洞洞拉鍊毛衣-06.png",
+
         ],
         sizes: [
-          { label: "0", stock: 4 },
-          { label: "1", stock: 9 },
-          { label: "2", stock: 13 },
-          { label: "3", stock: 3 }
+          { label: "1", stock: 0 },
+          { label: "2", stock: 0 }
+        ]
+      },
+      {
+        "color": "Iron Gray",
+        "colorCode": "#727272",
+        "imageFiles": [
+          "2025FW黑色洞洞拉鍊毛衣-08.jpeg",
+          "2025FW黑色洞洞拉鍊毛衣-09.jpeg",
+
+        ],
+        sizes: [
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 }
+        ]
+      },
+      {
+        "color": "Sage Green",
+        "colorCode": "#738276",
+        "imageFiles": [
+          "2025FW黑色洞洞拉鍊毛衣-07.jpeg",
+          "2025FW黑色洞洞拉鍊毛衣-10.jpeg",
+
+        ],
+        sizes: [
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 }
         ]
       }
     ]
