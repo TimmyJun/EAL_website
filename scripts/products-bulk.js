@@ -1,75 +1,130 @@
 const productDefs = [
   {
-    "slug": "Hole-Knit-Double-Zipper-Sweater",
-    "title": "Hole Knit Double Zipper Sweater",
-    "price": 1880,
-    "year": 2026,
+    "slug": "Round-Neck-Tee",
+    "title": "Round Neck Tee ",
+    "price": 1280,
+    "year": 2023,
     "season": "SS",
     "description": `
-  * Regular fit <br>
-* Double Zipper <br>
-* Hole Knit <br>
+  * Collars in different colors <br>
+* Loose Fit <br>
 * 100% Cotton<br>
 <br>
-* 常規版型<br>
-* 雙拉鍊<br>
-* 網洞針織<br>
+* 領子撞色設計<br>
+* 寬鬆版型<br>
 * 100% 棉材質<br>
 <br>
 * Size 1<br>
-胸圍 Chest - 63cm<br>
-衣長 Length - 54cm<br>
-袖長 Sleeve - 66cm<br>
+胸寬 Chest - 60cm<br>
+衣長 Length - 68cm<br>
+肩寬 Shoulder - 57cm<br>
 <br>
 * Size 2<br>
-胸圍 Chest - 67cm<br>
-衣長 Length - 60cm<br>
-袖長 Sleeve - 70cm<br>
+胸寬 Chest - 63cm<br>
+衣長 Length - 71cm<br>
+肩寬 Shoulder - 59cm<br>
+<br>
+* Size 3<br>
+胸寬 Chest - 66cm<br>
+衣長 Length - 74cm<br>
+肩寬 Shoulder - 61cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "Black",
-        "colorCode": "#000000",
+        "color": "White",
+        "colorCode": "#FFFFFF",
         "imageFiles": [
-          "2025FW黑色洞洞拉鍊毛衣-01.png",
-          "2025FW黑色洞洞拉鍊毛衣-02.png",
-          "2025FW黑色洞洞拉鍊毛衣-03.png",
-          "2025FW黑色洞洞拉鍊毛衣-04.png",
-          "2025FW黑色洞洞拉鍊毛衣-05.png",
-          "2025FW黑色洞洞拉鍊毛衣-06.png",
-
+          "2023SS黑色領子短袖-01.jpg",
+          "2023SS黑色領子短袖-02.jpg",
+          "2023SS黑色領子短袖-03.jpg",
+          "2023SS黑色領子短袖-04.jpg"
         ],
         sizes: [
           { label: "1", stock: 0 },
+          { label: "2", stock: 3 },
           { label: "2", stock: 0 }
         ]
       },
       {
-        "color": "Iron Gray",
-        "colorCode": "#727272",
+        "color": "black",
+        "colorCode": "#000000",
         "imageFiles": [
-          "2025FW黑色洞洞拉鍊毛衣-08.jpeg",
-          "2025FW黑色洞洞拉鍊毛衣-09.jpeg",
-
+          "2023SS白色領子短袖-01.jpg",
+          "2023SS白色領子短袖-02.jpg",
+          "2023SS白色領子短袖-03.jpg",
+          "2023SS白色領子短袖-04.jpg"
         ],
         sizes: [
-          { label: "1", stock: 10 },
-          { label: "2", stock: 10 }
+          { label: "1", stock: 1 },
+          { label: "2", stock: 0 },
+          { label: "2", stock: 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "Mess-Words-Tee",
+    "title": "Mess Words Tee",
+    "price": 1180,
+    "year": 2023,
+    "season": "SS",
+    "description": `
+  * Handwritten font Logo words <br>
+* Loose Fit <br>
+* 100% Cotton<br>
+<br>
+* 草寫文字字體<br>
+* 寬鬆版型<br>
+* 100% 棉材質<br>
+<br>
+* Size 1<br>
+胸寬 Chest - 60cm<br>
+衣長 Length - 68cm<br>
+肩寬 Shoulder - 57cm<br>
+<br>
+* Size 2<br>
+胸寬 Chest - 63cm<br>
+衣長 Length - 71cm<br>
+肩寬 Shoulder - 59cm<br>
+<br>
+* Size 3<br>
+胸寬 Chest - 66cm<br>
+衣長 Length - 74cm<br>
+肩寬 Shoulder - 61cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
+    "variants": [
+      {
+        "color": "White",
+        "colorCode": "#FFFFFF",
+        "imageFiles": [
+          "2023SS白色草寫短袖-01.jpg",
+          "2023SS白色草寫短袖-02.jpg",
+          "2023SS白色草寫短袖-03.jpg",
+          "2023SS白色草寫短袖-04.jpg"
+        ],
+        sizes: [
+          { label: "1", stock: 0 },
+          { label: "2", stock: 0 },
+          { label: "2", stock: 0 }
         ]
       },
       {
-        "color": "Sage Green",
-        "colorCode": "#738276",
+        "color": "black",
+        "colorCode": "#000000",
         "imageFiles": [
-          "2025FW黑色洞洞拉鍊毛衣-07.jpeg",
-          "2025FW黑色洞洞拉鍊毛衣-10.jpeg",
-
+          "2023SS黑色草寫短袖-01.jpg",
+          "2023SS黑色草寫短袖-02.jpg",
+          "2023SS黑色草寫短袖-03.jpg",
+          "2023SS黑色草寫短袖-04.jpg"
         ],
         sizes: [
-          { label: "1", stock: 10 },
-          { label: "2", stock: 10 }
+          { label: "1", stock: 0 },
+          { label: "2", stock: 0 },
+          { label: "2", stock: 0 }
         ]
       }
     ]
