@@ -38,3 +38,4 @@ node_modules/.prisma/
 tmp/
 .vercel
 claude.md
+CHANGELOG.md
