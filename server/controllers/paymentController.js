@@ -142,6 +142,12 @@ exports.createOrder = async (req, res) => {
 
     const items = Array.isArray(order?.items) ? order.items : []
 
+    // Instagram 為必填，後端再做一次防呆：trim 後若為空直接回 400；過長則截斷至 30 字元
+    const instagram = String(contact.instagram || '').trim().slice(0, 30);
+    if (!instagram) {
+      return res.status(400).send('Missing required fields: instagram.');
+    }
+
     const itemsSummary = await buildItemsSummaryFromDb(items)
 
     const stockItems = items.map(i => ({
@@ -160,10 +166,12 @@ exports.createOrder = async (req, res) => {
         update: {
           itemsJson: JSON.stringify(stockItems),
           processedAt: null, // 每次重新建立交易都視為尚未處理
+          instagram
         },
         create: {
           merchantTradeNo: tradeNo,
           itemsJson: JSON.stringify(stockItems),
+          instagram
         },
       });
       log('StockSnapshot upserted:', tradeNo);
@@ -178,6 +186,7 @@ exports.createOrder = async (req, res) => {
         buyer_name: contact.name || '',
         buyer_phone: contact.phone || '',
         buyer_email: contact.email || email || '',
+        instagram, // 使用上方已 trim + slice(0,30) 的值，避免前端被繞過時寫入超長字串
         ship_method: shipping.method || '',
         ship_summary: buildShippingSummary(shipping),
         ship_address: shipping.address || '',

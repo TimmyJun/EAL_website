@@ -37,3 +37,4 @@ node_modules/.prisma/
 *.local
 tmp/
 .vercel
+claude.md

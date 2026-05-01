@@ -10,7 +10,7 @@ const COLUMNS = [
   'ship_method', 'ship_summary', 'ship_address',
   'items_json', 'amount', 'status',
   'payment_method', 'payment_date', 'rtn_code', 'rtn_msg',
-  'note',
+  'note', "instagram"
 ];
 
 function normalizePrivateKey(raw) {
@@ -90,6 +90,7 @@ function toValuesRow(d) {
     String(get('rtn_code')),
     String(get('rtn_msg')),
     String(get('note')),
+    String(get('instagram'))
   ];
 }
 
@@ -97,7 +98,7 @@ async function appendOrderDraft(rowData) {
   const sheets = await getSheets();
   const resp = await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A:Q`,
+    range: `${SHEET_NAME}!A:R`,
     valueInputOption: 'RAW',
     requestBody: { values: [toValuesRow(rowData)] },
   });
@@ -108,7 +109,7 @@ async function findRowIndexByTradeNo(merchantTradeNo) {
   const sheets = await getSheets();
   const { data } = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A:Q`,
+    range: `${SHEET_NAME}!A:R`,
   });
   const rows = data.values || [];
   const idx0 = rows.findIndex(r => String(r[1] || '') === String(merchantTradeNo)); // B 欄
@@ -121,7 +122,7 @@ async function updateRowByIndex(rowIndex, patch) {
 
   const { data } = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A${rowIndex}:Q${rowIndex}`,
+    range: `${SHEET_NAME}!A${rowIndex}:R${rowIndex}`,
   });
 
   const row = (data.values && data.values[0]) || new Array(COLUMNS.length).fill('');
@@ -131,10 +132,10 @@ async function updateRowByIndex(rowIndex, patch) {
     if (k in map) map[k] = String(v ?? '');
   });
 
-  const newRow = COLUMNS.map(k => map[k]);
+  const newRow = COLUMNS.map(k => map[k])
   const resp = await sheets.spreadsheets.values.update({
     spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A${rowIndex}:Q${rowIndex}`,
+    range: `${SHEET_NAME}!A${rowIndex}:R${rowIndex}`,
     valueInputOption: 'RAW',
     requestBody: { values: [newRow] },
   });

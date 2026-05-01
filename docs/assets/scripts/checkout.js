@@ -138,18 +138,19 @@ async function checkStock(entries) {
 
 // ---------- 驗證 & Payload ----------
 function validateForm() {
-  const baseNeed = ['name', 'phone', 'email'];
-  const method = getShipMethod();
+  const baseNeed = ['name', 'phone', 'email', "instagram"]
+  const method = getShipMethod()
   const need = method === 'pickup'
     ? [...baseNeed, 'storeBrand', 'county', 'district', 'storeName', 'storeAddr']
-    : [...baseNeed, 'homeAddress'];
+    : [...baseNeed, 'homeAddress']
 
   let ok = true;
   need.forEach(id => {
     const input = q('#' + id);
     let valid = !!input?.value?.trim();
     if (id === 'phone' && valid) valid = /^09\d{8}$/.test(input.value.trim());
-    if (id === 'email' && valid) valid = input.checkValidity();
+    if (id === 'email' && valid) valid = input.checkValidity()
+    if (id === 'instagram' && valid) valid = input.value.trim().length <= 30
     showError(id, !valid);
     if (!valid) ok = false;
   });
@@ -169,7 +170,9 @@ function buildAndStorePayload(entries, grand) {
 
   const payload = {
     contact: {
-      name: fd.name, phone: fd.phone, email: fd.email, note: fd.note || ''
+      name: fd.name, phone: fd.phone, email: fd.email,
+      instagram: (fd.instagram || '').trim(),
+      note: fd.note || ''
     },
     shipping: {
       method,
