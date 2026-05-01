@@ -186,6 +186,17 @@
   color: #ffffff;
 }
 
+/* 售完尺寸：HTML disabled 不可點，視覺上加深半透明 + 灰字 */
+.size-disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+  color: #999;
+}
+
+.size-disabled:hover {
+  border: 1px solid #dcdcdc;
+}
+
 /* quantity */
 .product-quantity-container {
   display: flex;

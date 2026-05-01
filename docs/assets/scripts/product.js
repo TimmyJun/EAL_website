@@ -95,6 +95,7 @@
   }
 
   function renderColorButtons(variants) {
+    // 仍需計算 firstAvailableIdx：active 預設選「第一個有庫存」的 variant，避免初始畫面停在售完色
     const firstAvailableIdx = Math.max(0, (variants || []).findIndex(v => sumVariantStock(v) > 0));
     return (variants || []).map((v, idx) => {
       const total = sumVariantStock(v);
@@ -102,14 +103,14 @@
       const cls = [
         'color-btn',
         (!disabled && idx === firstAvailableIdx) ? 'color-active' : '',
-        disabled ? 'color-disabled' : '',
       ].filter(Boolean).join(' ');
+      // 售完的顏色不加 HTML `disabled`、也不加視覺 class（與在貨色看起來一致）；
+      // 仍允許點擊以瀏覽該色照片，售完狀態由 size 列表與 Add to Cart 提示處理
       return `
       <button class="${cls}"
               data-color="${v.color}"
               data-color-code="${v.colorCode || ''}"
-              style="background-color:${v.colorCode || '#dcdcdc'}"
-              ${disabled ? 'disabled' : ''}>
+              style="background-color:${v.colorCode || '#dcdcdc'}">
       </button>
     `;
     }).join('');
@@ -262,6 +263,9 @@
       toggleThumbGroupsByColor(pageRoot, activeColor);
       const group = $(`${SEL.thumbGroups}[data-color="${activeColor}"]`, pageRoot);
       if (group) setMainPhotoByFirstThumbOfGroup(mainPhoto, group);
+      // ✅ 修正 Bug 1-B：當 variants[0] 售完時，active color 與初始 size list 不同步
+      // 初始化階段強制以 active color 重繪 size list，確保畫面與選色一致
+      rerenderSizesForColor(pageRoot, product, activeColor);
     }
     if (qtyInput && activeColor) {
       const activeSize = $(`${SEL.sizeOpts}.size-active`, pageRoot)?.dataset.size;
