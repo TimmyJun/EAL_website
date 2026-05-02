@@ -49,7 +49,7 @@ const productDefs = [
       },
       {
         "color": "black",
-        "colorCode": "#000000",
+        "colorCode": "#7d7d7d",
         "imageFiles": [
           "2023SS白色領子短袖-01.jpg",
           "2023SS白色領子短袖-02.jpg",
