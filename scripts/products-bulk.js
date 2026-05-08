@@ -1,130 +1,59 @@
 const productDefs = [
   {
-    "slug": "Round-Neck-Tee",
-    "title": "Round Neck Tee ",
-    "price": 1280,
-    "year": 2023,
+    "slug": "Embroidered-Wide-Cut-Cargo",
+    "title": "Embroidered Wide Cut Cargo",
+    "price": 2980,
+    "year": 2026,
     "season": "SS",
     "description": `
-  * Collars in different colors <br>
-* Loose Fit <br>
-* 100% Cotton<br>
+  * Wide Leg Structured <br>
+* Minimalist silver rivet detailing <br>
+* Logo on the back <br>
+* Clean flared silhouette<br>
 <br>
-* 領子撞色設計<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
+* 闊腿喇叭褲版型<br>
+* 銀色鉚釘細節<br>
+* 反面Logo呈現<br>
+* 完美落地褲<br>
+<br>
+* Size 0<br>
+腰圍 Waist - 36cm<br>
+腳口 Hem Opening - 32cm<br>
+褲長 Length - 106cm<br>
 <br>
 * Size 1<br>
-胸寬 Chest - 60cm<br>
-衣長 Length - 68cm<br>
-肩寬 Shoulder - 57cm<br>
+腰圍 Waist - 38cm<br>
+腳口 Hem Opening - 34cm<br>
+褲長 Length - 112cm<br>
 <br>
 * Size 2<br>
-胸寬 Chest - 63cm<br>
-衣長 Length - 71cm<br>
-肩寬 Shoulder - 59cm<br>
+腰圍 Waist - 42cm<br>
+腳口 Hem Opening - 36cm<br>
+褲長 Length - 115cm<br>
 <br>
 * Size 3<br>
-胸寬 Chest - 66cm<br>
-衣長 Length - 74cm<br>
-肩寬 Shoulder - 61cm<br>
+腰圍 Waist - 44cm<br>
+腳口 Hem Opening - 37cm<br>
+褲長 Length - 117cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
-      {
-        "color": "White",
-        "colorCode": "#FFFFFF",
-        "imageFiles": [
-          "2023SS黑色領子短袖-01.jpg",
-          "2023SS黑色領子短袖-02.jpg",
-          "2023SS黑色領子短袖-03.jpg",
-          "2023SS黑色領子短袖-04.jpg"
-        ],
-        sizes: [
-          { label: "1", stock: 0 },
-          { label: "2", stock: 3 },
-          { label: "2", stock: 0 }
-        ]
-      },
-      {
-        "color": "black",
-        "colorCode": "#7d7d7d",
-        "imageFiles": [
-          "2023SS白色領子短袖-01.jpg",
-          "2023SS白色領子短袖-02.jpg",
-          "2023SS白色領子短袖-03.jpg",
-          "2023SS白色領子短袖-04.jpg"
-        ],
-        sizes: [
-          { label: "1", stock: 1 },
-          { label: "2", stock: 0 },
-          { label: "2", stock: 0 }
-        ]
-      }
-    ]
-  },
-  {
-    "slug": "Mess-Words-Tee",
-    "title": "Mess Words Tee",
-    "price": 1180,
-    "year": 2023,
-    "season": "SS",
-    "description": `
-  * Handwritten font Logo words <br>
-* Loose Fit <br>
-* 100% Cotton<br>
-<br>
-* 草寫文字字體<br>
-* 寬鬆版型<br>
-* 100% 棉材質<br>
-<br>
-* Size 1<br>
-胸寬 Chest - 60cm<br>
-衣長 Length - 68cm<br>
-肩寬 Shoulder - 57cm<br>
-<br>
-* Size 2<br>
-胸寬 Chest - 63cm<br>
-衣長 Length - 71cm<br>
-肩寬 Shoulder - 59cm<br>
-<br>
-* Size 3<br>
-胸寬 Chest - 66cm<br>
-衣長 Length - 74cm<br>
-肩寬 Shoulder - 61cm<br>
-<br>
-* 尺寸皆為商品平量數據 單位皆為公分 *<br>
-* Measurements are all in centimeters *`,
-    "variants": [
-      {
-        "color": "White",
-        "colorCode": "#FFFFFF",
-        "imageFiles": [
-          "2023SS白色草寫短袖-01.jpg",
-          "2023SS白色草寫短袖-02.jpg",
-          "2023SS白色草寫短袖-03.jpg",
-          "2023SS白色草寫短袖-04.jpg"
-        ],
-        sizes: [
-          { label: "1", stock: 0 },
-          { label: "2", stock: 0 },
-          { label: "2", stock: 0 }
-        ]
-      },
       {
         "color": "black",
         "colorCode": "#000000",
         "imageFiles": [
-          "2023SS黑色草寫短袖-01.jpg",
-          "2023SS黑色草寫短袖-02.jpg",
-          "2023SS黑色草寫短袖-03.jpg",
-          "2023SS黑色草寫短袖-04.jpg"
+          "2026ss黑色刺繡喇叭褲-01.jpeg",
+          "2026ss黑色刺繡喇叭褲-02.jpeg",
+          "2026ss黑色刺繡喇叭褲-03.jpeg",
+          "2026ss黑色刺繡喇叭褲-04.jpeg",
+          "2026ss黑色刺繡喇叭褲-05.jpeg"
         ],
         sizes: [
-          { label: "1", stock: 0 },
-          { label: "2", stock: 0 },
-          { label: "2", stock: 0 }
+          { label: "0", stock: 4 },
+          { label: "1", stock: 21 },
+          { label: "2", stock: 21 },
+          { label: "3", stock: 4 }
         ]
       }
     ]
