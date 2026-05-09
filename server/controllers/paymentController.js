@@ -266,7 +266,7 @@ exports.notify = async (req, res) => {
         log('Sheet updated to PAID:', merchantTradeNo, tradeNo);
       } catch (e) {
         err('update PAID failed:', merchantTradeNo, e?.message || e);
-        // 即便更新失敗，也回 1|OK，避免綠界重送太多次
+        return res.status(500).send('0|ERROR')
       }
 
       try {
