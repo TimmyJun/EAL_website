@@ -1,128 +1,320 @@
 const productDefs = [
   {
-    "slug": "Embroidered-Wide-Cut-Cargo",
-    "title": "Embroidered Wide Cut Cargo",
-    "price": 2980,
+    "slug": "Double-Layered-Long-Sleeve-Polo-Shirt-Grey",
+    "title": "Double Layered Long Sleeve Polo Shirt (Grey)",
+    "price": 1980,
     "year": 2026,
     "season": "SS",
     "description": `
-  * Wide Leg Structured <br>
-* Minimalist silver rivet detailing <br>
-* Logo on the back <br>
-* Clean flared silhouette<br>
+  * Clean fit <br>
+* Polo Shirt <br>
+* Mottled print <br>
+* 100% Light fabric Cotton<br>
 <br>
-* 闊腿喇叭褲版型<br>
-* 銀色鉚釘細節<br>
-* 反面Logo呈現<br>
-* 完美落地褲<br>
-<br>
-* Size 0<br>
-腰圍 Waist - 36cm<br>
-腳口 Hem Opening - 32cm<br>
-褲長 Length - 106cm<br>
+* 正常版型<br>
+* Polo長袖<br>
+* 斑駁印花工藝<br>
+* 100% 輕薄棉材質<br>
 <br>
 * Size 1<br>
-腰圍 Waist - 38cm<br>
-腳口 Hem Opening - 34cm<br>
-褲長 Length - 112cm<br>
+胸圍 Chest - 58cm<br>
+衣長 Length - 64m<br>
+袖長 Sleeve - 62cm<br>
 <br>
 * Size 2<br>
-腰圍 Waist - 42cm<br>
-腳口 Hem Opening - 36cm<br>
-褲長 Length - 115cm<br>
+胸圍 Chest - 60cm<br>
+衣長 Length - 65cm<br>
+袖長 Sleeve - 64cm<br>
 <br>
 * Size 3<br>
-腰圍 Waist - 44cm<br>
-腳口 Hem Opening - 37cm<br>
-褲長 Length - 117cm<br>
+胸圍 Chest - 62cm<br>
+衣長 Length - 66cm<br>
+袖長 Sleeve - 66cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "black",
-        "colorCode": "#000000",
+        "color": "grey",
+        "colorCode": "#464646",
         "imageFiles": [
-          "2026ss黑色刺繡工裝喇叭褲-01.png",
-          "2026ss黑色刺繡工裝喇叭褲-02.png",
-          "2026ss黑色刺繡工裝喇叭褲-03.png",
-          "2026ss黑色刺繡工裝喇叭褲-04.png",
-          "2026ss黑色刺繡工裝喇叭褲-05.png",
-          "2026ss黑色刺繡工裝喇叭褲-06.png",
-          "2026ss黑色刺繡工裝喇叭褲-08.png",
-          "2026ss黑色刺繡工裝喇叭褲-09.png"
+          "26ss灰色雙polo-01.png",
+          "26ss灰色雙polo-02.png",
+          "26ss灰色雙polo-03.png",
+          "26ss灰色雙polo-04.png",
+          "26ss灰色雙polo-05.png",
+          "26ss灰色雙polo-06.png",
+          "26ss灰色雙polo-07.png",
+          "26ss灰色雙polo-08.png"
         ],
         sizes: [
-          { label: "0", stock: 3 },
-          { label: "1", stock: 21 },
-          { label: "2", stock: 21 },
-          { label: "3", stock: 4 }
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
         ]
       }
     ]
   },
   {
-    "slug": "Hole-Knit-Double-Zipper-Sweater",
-    "title": "Hole Knit Double Zipper Sweater",
-    "price": 1880,
+    "slug": "Double-Layered-Long-Sleeve-Polo-Shirt-White",
+    "title": "Double Layered Long Sleeve Polo Shirt (White)",
+    "price": 1980,
     "year": 2026,
     "season": "SS",
     "description": `
-  * Regular fit <br>
-* Double Zipper <br>
-* Hole Knit <br>
-* 100% Cotton<br>
+  * Clean fit <br>
+* Polo Shirt <br>
+* Mottled print <br>
+* 100% Light fabric Cotton<br>
 <br>
-* 常規版型<br>
-* 雙拉鍊<br>
-* 網洞針織<br>
-* 100% 棉材質<br>
+* 正常版型<br>
+* Polo長袖<br>
+* 斑駁印花工藝<br>
+* 100% 輕薄棉材質<br>
 <br>
 * Size 1<br>
-胸圍 Chest - 63cm<br>
-衣長 Length - 54cm<br>
-袖長 Sleeve - 66cm<br>
+胸圍 Chest - 58cm<br>
+衣長 Length - 64m<br>
+袖長 Sleeve - 62cm<br>
 <br>
 * Size 2<br>
-胸圍 Chest - 67cm<br>
-衣長 Length - 60cm<br>
-袖長 Sleeve - 70cm<br>
+胸圍 Chest - 60cm<br>
+衣長 Length - 65cm<br>
+袖長 Sleeve - 64cm<br>
+<br>
+* Size 3<br>
+胸圍 Chest - 62cm<br>
+衣長 Length - 66cm<br>
+袖長 Sleeve - 66cm<br>
 <br>
 * 尺寸皆為商品平量數據 單位皆為公分 *<br>
 * Measurements are all in centimeters *`,
     "variants": [
       {
-        "color": "Sage Green",
-        "colorCode": "#BEC5A4",
+        "color": "white",
+        "colorCode": "#FFFFFF",
         "imageFiles": [
-          "2026ss灰綠色洞洞拉鍊毛衣-01.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-02.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-03.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-04.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-05.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-06.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-07.png"
+          "26ss白色雙polo-01.png",
+          "26ss白色雙polo-02.png",
+          "26ss白色雙polo-03.png",
+          "26ss白色雙polo-04.png",
+          "26ss白色雙polo-05.png",
+          "26ss白色雙polo-06.png",
+          "26ss白色雙polo-07.png",
+          "26ss白色雙polo-08.png"
         ],
         sizes: [
           { label: "1", stock: 10 },
-          { label: "2", stock: 10 }
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
         ]
-      },
+      }
+    ]
+  }, 
+  {
+    "slug": "Flannel-Patchwork-Raw-Denim-Jeans-Black",
+    "title": "Flannel Patchwork Raw Denim Jeans (Black)",
+    "price": 3480,
+    "year": 2026,
+    "season": "SS",
+    "description": `
+  * Loose fit <br>
+* Flannel-Patchwork <br>
+* Raw Denim<br>
+<br>
+* 寬鬆版型<br>
+* 法蘭絨格紋布料拼接<br>
+* 原色牛牛仔褲<br>
+<br>
+* Size 0<br>
+腰圍 Waist - 36cm<br>
+褲長 Length - 102cm<br>
+<br>
+* Size 1<br>
+腰圍 Waist - 40cm<br>
+褲長 Length - 108cm<br>
+<br>
+* Size 2<br>
+腰圍 Waist - 42cm<br>
+褲長 Length - 110cm<br>
+<br>
+* Size 3<br>
+腰圍 Waist - 44cm<br>
+褲長 Length - 112cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
+    "variants": [
       {
-        "color": "Iron Gray",
-        "colorCode": "#52595D",
+        "color": "Black",
+        "colorCode": "#000000",
         "imageFiles": [
-          "2026ss鐵灰色洞洞拉鍊毛衣-01.png",
-          "2026ss鐵灰色洞洞拉鍊毛衣-02.png",
-          "2026ss鐵灰色洞洞拉鍊毛衣-03.png",
-          "2026ss鐵灰色洞洞拉鍊毛衣-04.png",
-          "2026ss鐵灰色洞洞拉鍊毛衣-05.png",
-          "2026ss鐵灰色洞洞拉鍊毛衣-06.png",
-          "2026ss灰綠色洞洞拉鍊毛衣-07.png"
+          "26ss黑色格紋牛仔褲-01.png",
+          "26ss黑色格紋牛仔褲-02.png",
+          "26ss黑色格紋牛仔褲-03.png",
+          "26ss黑色格紋牛仔褲-04.png",
+          "26ss黑色格紋牛仔褲-05.png",
+          "26ss黑色格紋牛仔褲-06.png"
         ],
         sizes: [
+          { label: "0", stock: 10 },
           { label: "1", stock: 10 },
-          { label: "2", stock: 10 }
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "Flannel-Patchwork-Raw-Denim-Jeans-Blue",
+    "title": "Flannel Patchwork Raw Denim Jeans (Blue)",
+    "price": 3480,
+    "year": 2026,
+    "season": "SS",
+    "description": `
+  * Loose fit <br>
+* Flannel-Patchwork <br>
+* Raw Denim<br>
+<br>
+* 寬鬆版型<br>
+* 法蘭絨格紋布料拼接<br>
+* 原色牛牛仔褲<br>
+<br>
+* Size 0<br>
+腰圍 Waist - 36cm<br>
+褲長 Length - 102cm<br>
+<br>
+* Size 1<br>
+腰圍 Waist - 40cm<br>
+褲長 Length - 108cm<br>
+<br>
+* Size 2<br>
+腰圍 Waist - 42cm<br>
+褲長 Length - 110cm<br>
+<br>
+* Size 3<br>
+腰圍 Waist - 44cm<br>
+褲長 Length - 112cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
+    "variants": [
+      {
+        "color": "Blue",
+        "colorCode": "#2d2d41",
+        "imageFiles": [
+          "26ss藍色格紋牛仔褲-01.png",
+          "26ss藍色格紋牛仔褲-02.png",
+          "26ss藍色格紋牛仔褲-03.png",
+          "26ss藍色格紋牛仔褲-04.png",
+          "26ss藍色格紋牛仔褲-05.png",
+          "26ss藍色格紋牛仔褲-06.png"
+        ],
+        sizes: [
+          { label: "0", stock: 10 },
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "Classic-Raw-Denim-Jeans-Blue",
+    "title": "Classic Raw Denim Jeans (Blue)",
+    "price": 3080,
+    "year": 2026,
+    "season": "SS",
+    "description": `
+  * Loose fit <br>
+* Raw Denim<br>
+<br>
+* 寬鬆版型<br>
+* 原色牛牛仔褲<br>
+<br>
+* Size 0<br>
+腰圍 Waist - 36cm<br>
+褲長 Length - 102cm<br>
+<br>
+* Size 1<br>
+腰圍 Waist - 40cm<br>
+褲長 Length - 108cm<br>
+<br>
+* Size 2<br>
+腰圍 Waist - 42cm<br>
+褲長 Length - 110cm<br>
+<br>
+* Size 3<br>
+腰圍 Waist - 44cm<br>
+褲長 Length - 112cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
+    "variants": [
+      {
+        "color": "Blue",
+        "colorCode": "#2d2d41",
+        "imageFiles": [
+          "26ss藍色基礎牛仔褲-01.png",
+          "26ss藍色基礎牛仔褲-02.png",
+          "26ss藍色基礎牛仔褲-03.png",
+          "26ss藍色基礎牛仔褲-04.png"
+        ],
+        sizes: [
+          { label: "0", stock: 10 },
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "Classic-Raw-Denim-Jeans-Black",
+    "title": "Classic Raw Denim Jeans (Black)",
+    "price": 3080,
+    "year": 2026,
+    "season": "SS",
+    "description": `
+  * Loose fit <br>
+* Raw Denim<br>
+<br>
+* 寬鬆版型<br>
+* 原色牛牛仔褲<br>
+<br>
+* Size 0<br>
+腰圍 Waist - 36cm<br>
+褲長 Length - 102cm<br>
+<br>
+* Size 1<br>
+腰圍 Waist - 40cm<br>
+褲長 Length - 108cm<br>
+<br>
+* Size 2<br>
+腰圍 Waist - 42cm<br>
+褲長 Length - 110cm<br>
+<br>
+* Size 3<br>
+腰圍 Waist - 44cm<br>
+褲長 Length - 112cm<br>
+<br>
+* 尺寸皆為商品平量數據 單位皆為公分 *<br>
+* Measurements are all in centimeters *`,
+    "variants": [
+      {
+        "color": "Black",
+        "colorCode": "#000000",
+        "imageFiles": [
+          "26ss黑色基礎牛仔褲-01.png",
+          "26ss黑色基礎牛仔褲-02.png",
+          "26ss黑色基礎牛仔褲-03.png",
+          "26ss黑色基礎牛仔褲-04.png"
+        ],
+        sizes: [
+          { label: "0", stock: 10 },
+          { label: "1", stock: 10 },
+          { label: "2", stock: 10 },
+          { label: "3", stock: 10 }
         ]
       }
     ]
