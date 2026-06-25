@@ -4,6 +4,45 @@
 
 ---
 
+## 2026-06-24 — 新增「Archive Sale」獨立類別
+
+### 變更類型
+feat + DB migration（schema 變動）
+
+### 變更原因
+需要在 Header Menu 新增一個與年份/季別無關、跨年份聚合的獨立商品分類「Archive Sale」。原本選單機制以 (year, season) 為單位，無法表達此需求。
+
+### 設計決策
+採用獨立旗標 `Product.isArchived`，而非把 ARCHIVE 加入 `Season` enum。
+- 優點：商品的 `season/year` 不被破壞、語意正交、可逆（關旗標即還原）、不污染 enum。
+- 取捨：相較 enum 改動面較廣（schema + 前後端各一處）；archived 商品在 DB 仍保有 year 值（不顯示、不使用，僅為滿足 NOT NULL）。
+- 「完全獨立、不帶年份」透過排除過濾達成：一般季別查詢與 season-tags 一律排除 `isArchived: true`，故 archived 商品會從原年份分類消失，只出現在 Archive Sale。
+
+### 變更檔案
+
+| 檔案 | 變更內容 |
+|---|---|
+| `prisma/schema.prisma` | `Product` 新增 `isArchived Boolean @default(false)` 與 `@@index([isArchived])` |
+| `prisma/migrations/20260624000000_add_product_is_archived/migration.sql` | 新增 `ADD COLUMN isArchived` 與索引 |
+| `server/models/productModel.js` | `listProducts` 加 `archived` 分支（只查 `isArchived: true`、忽略 year/season）；一般查詢加 `isArchived: false`；`getSeasonTags` 加 `where: { isArchived: false }` |
+| `server/controllers/productController.js` | `list` 讀取 `?archived=1\|true` 並轉布林傳入 model |
+| `docs/index.html` | Menu 新增頂層項目 `ARCHIVE SALE`，連結 `#products?archived=1&label=Archive%20Sale` |
+| `docs/assets/scripts/products.js` | `parseHashRoute` 解析 `archived`；`renderProductsByRoute` 加 archived 分支 |
+| `docs/assets/scripts/productsService.js` | `fetchProductsBy` 支援 `archived`，cache key 分離 |
+| `scripts/seed-bulk-products.js` | 解構並寫入 `isArchived`（預設 false） |
+| `scripts/products-bulk.js` | 補充以 `isArchived: true` 標記 Archive Sale 商品的註解 |
+
+### 連動影響
+- **需執行 migration**：部署前須跑 `npx prisma migrate deploy`（或 dev）套用 `isArchived` 欄位。
+- 現有資料安全：新欄位 `@default(false)`，既有商品維持非 archive。
+- 前端為靜態部署（GitHub Pages），需重新部署 `docs/`。
+
+### 回滾方式
+- 程式碼：`git revert <本次 commit>`
+- DB：`ALTER TABLE "Product" DROP COLUMN "isArchived";`（並移除該 migration 目錄）
+
+---
+
 ## 2026-05-01 — 移除 .color-disabled 樣式
 
 ### 變更類型

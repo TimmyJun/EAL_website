@@ -16,9 +16,11 @@ model Product {
   description String?
   season      Season
   year        Int
+  isArchived  Boolean   @default(false)
   variants    Variant[]
 
   @@index([year, season])
+  @@index([isArchived])
 }
 
 model Variant {

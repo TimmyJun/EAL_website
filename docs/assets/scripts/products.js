@@ -28,6 +28,7 @@ function parseHashRoute() {
     route,
     year: sp.get('year') ? Number(sp.get('year')) : undefined,
     type: sp.get('type') ? String(sp.get('type')).toLowerCase() : undefined,
+    archived: sp.get('archived') === '1' || sp.get('archived') === 'true',
     label: sp.get('label') ? String(sp.get('label')) : '',
   };
 }
@@ -38,13 +39,19 @@ async function renderProductsByRoute() {
   const heading = document.querySelector('.products-container .collection-name');
   if (!listEl) return;
 
-  const { route, year, type, label } = parseHashRoute();
+  const { route, year, type, archived, label } = parseHashRoute();
   if (route !== 'products') return;
 
   listEl.innerHTML = '載入中…';
 
   try {
-    if (year && type) {
+    if (archived) {
+      if (heading) heading.textContent = label ? `E’TREALOUEST ${label}` : 'E’TREALOUEST Archive Sale';
+      const items = await window.productService.fetchProductsBy({ archived: true });
+      listEl.innerHTML = Array.isArray(items) && items.length
+        ? renderProductsHTML(items)
+        : '<p>目前沒有商品</p>';
+    } else if (year && type) {
       if (heading) heading.textContent = label ? `E’TREALOUEST ${label}` : 'E’TREALOUEST';
       const items = await window.productService.fetchProductsBy({ year, type });
       listEl.innerHTML = Array.isArray(items) && items.length

@@ -30,9 +30,21 @@ function sortSizesOnProducts(products) {
   return products.map(sortSizesOnProduct);
 }
 
-async function listProducts({ year, type } = {}) {
+async function listProducts({ year, type, archived } = {}) {
+  // Archive Sale：獨立類別，忽略 year/season，只看 isArchived
+  if (archived) {
+    const rows = await prisma.product.findMany({
+      where: { isArchived: true },
+      orderBy: { createdAt: 'desc' },
+      include: { variants: { include: { sizes: true } } },
+    });
+    return sortSizesOnProducts(rows);
+  }
+
   const season = normalizeSeasonFromType(type);
   const where = {
+    // 一般（季別）查詢一律排除已歸入 Archive Sale 的商品
+    isArchived: false,
     ...(year ? { year: Number(year) } : {}),
     ...(season ? { season } : {}),
   };
@@ -98,6 +110,7 @@ async function getProductsByIds(ids = []) {
 // 取得去重的 (year, season) 清單
 async function getSeasonTags() {
   const rows = await prisma.product.findMany({
+    where: { isArchived: false }, // 已歸入 Archive Sale 的商品不產生季別標籤
     distinct: ['year', 'season'],
     select: { year: true, season: true }, // season: 'SS' | 'FW'
     orderBy: [{ year: 'desc' }, { season: 'desc' }],

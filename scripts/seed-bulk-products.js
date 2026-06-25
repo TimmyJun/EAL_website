@@ -66,7 +66,7 @@ async function uploadVariantImages(productSlug, variant) {
 
 // seed 單一商品（但支援多 variants、多圖）
 async function seedSingleProduct(productDef) {
-  const { slug, title, price, year, season, description, variants } = productDef;
+  const { slug, title, price, year, season, description, variants, isArchived = false } = productDef;
 
   console.log(`\n🚀 開始處理商品：${title} (${slug})`);
 
@@ -101,6 +101,7 @@ async function seedSingleProduct(productDef) {
         year,
         season,
         description,
+        isArchived,
         variants: { create: variantsToCreate },
       },
       include: { variants: { include: { sizes: true } } },
@@ -126,6 +127,7 @@ async function seedSingleProduct(productDef) {
         year,
         season,
         description,
+        isArchived,
         variants: { create: variantsToCreate },
       },
       include: { variants: { include: { sizes: true } } },

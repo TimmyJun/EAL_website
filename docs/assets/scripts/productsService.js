@@ -71,12 +71,16 @@
     }, fresh)
   }
 
-  async function fetchProductsBy({ year, type, fresh = false } = {}) {
+  async function fetchProductsBy({ year, type, archived = false, fresh = false } = {}) {
     await window.CONFIG_READY;
     const baseUrl = new URL(api('/api/products'), window.location.origin);
-    if (year) baseUrl.searchParams.set('year', String(year));
-    if (type) baseUrl.searchParams.set('type', String(type));
-    const key = `products:query:${window.CONFIG.CACHE_VERSION}:${year || ''}:${type || ''}`
+    if (archived) {
+      baseUrl.searchParams.set('archived', '1');
+    } else {
+      if (year) baseUrl.searchParams.set('year', String(year));
+      if (type) baseUrl.searchParams.set('type', String(type));
+    }
+    const key = `products:query:${window.CONFIG.CACHE_VERSION}:${archived ? 'archive' : `${year || ''}:${type || ''}`}`
     const url = withTs(baseUrl.toString(), fresh)
     return withCache(key, 60_000, async () => {
       const res = await fetch(url, { cache: cacheMode(fresh) });
