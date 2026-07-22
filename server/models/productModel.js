@@ -11,10 +11,14 @@ function normalizeSeasonFromType(type) {
   return ['SS', 'FW', 'AW'].includes(t) ? t : undefined;
 }
 
-function sortSizesOnProduct(product) {
-  if (!product || !Array.isArray(product.variants)) return product;
+// 折扣（售價）邏輯的單一真相
+const { withPricing } = require('../utils/pricing');
 
-  return {
+function sortSizesOnProduct(product) {
+  if (!product) return product;
+  if (!Array.isArray(product.variants)) return withPricing(product);
+
+  return withPricing({
     ...product,
     variants: product.variants.map((v) => ({
       ...v,
@@ -22,7 +26,7 @@ function sortSizesOnProduct(product) {
         ? [...v.sizes].sort((a, b) => Number(a.label) - Number(b.label))
         : [],
     })),
-  };
+  });
 }
 
 function sortSizesOnProducts(products) {

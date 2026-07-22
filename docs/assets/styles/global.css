@@ -13,6 +13,14 @@ body {
   box-sizing: border-box;
 }
 
+/* 折扣原價：刪除線、灰字，顯示於折後價之前 */
+.price-original {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 0.4em;
+  font-size: 0.9em;
+}
+
 nav {
   display: flex;
   align-items: center;

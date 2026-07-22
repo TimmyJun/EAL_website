@@ -140,7 +140,9 @@ async function renderCartAsync() {
   let subtotal = 0;
   cartItemsEl.innerHTML = entries.map(({ key, id, color, size, qty }) => {
     const m = metaMap[id] || {};
-    const price = Number(m.price) || 0;
+    const original = Number(m.price) || 0;
+    const price = Number(m.salePrice ?? m.price) || 0; // 折後價（無折扣時等於原價）
+    const onSale = !!m.onSale && price < original;
     const img = (m.images && m.images[color]) || m.image || '';
     const title = m.title || id;
     const currency = m.currency || 'TWD';
@@ -163,7 +165,7 @@ async function renderCartAsync() {
         <img class="cart-item__thumb" src="${img}" alt="">
         <div>
           <p class="cart-item__title">${escapeHTML(title)}</p>
-          <p class="cart-item__meta">${escapeHTML(metaText)} ${metaText ? ' · ' : ''}${fmtMoney(price, currency)} × <span class="qty-text">${finalQty}</span></p>
+          <p class="cart-item__meta">${escapeHTML(metaText)} ${metaText ? ' · ' : ''}${onSale ? `<span class="price-original">${fmtMoney(original, currency)}</span> ` : ''}${fmtMoney(price, currency)} × <span class="qty-text">${finalQty}</span></p>
           <div class="qty-control">
             <button class="qty-btn" data-action="dec" aria-label="Decrease quantity">-</button>
             <span aria-live="polite">${finalQty}</span>

@@ -165,7 +165,9 @@
 
       <div class="product-info">
         <h3 class="product-name">${product.title}</h3>
-        <span class="product-price">${fmtPrice(product.price)}</span>
+        <span class="product-price">${(product.onSale && typeof product.salePrice === 'number' && product.salePrice < product.price)
+        ? `<span class="price-original">${fmtPrice(product.price)}</span> ${fmtPrice(product.salePrice)}`
+        : fmtPrice(product.price)}</span>
 
         <span class="colors-btn-title">COLOUR</span>
         <div class="colors">${renderColorButtons(product.variants)}</div>

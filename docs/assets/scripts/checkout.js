@@ -106,8 +106,9 @@ async function loadCartAndRender() {
   let subtotal = 0;
 
   entries.forEach(e => {
-    const meta = metaMap[e.id] || { title: e.id, price: 0, image: 'assets/images/placeholder.png', images: {} };
-    const unit = Number(meta.price) || 0;
+    const meta = metaMap[e.id] || { title: e.id, price: 0, salePrice: 0, image: 'assets/images/placeholder.png', images: {} };
+    // 折後價優先（送綠界的金額也會是折後價）；無折扣時 salePrice 等於原價
+    const unit = Number(meta.salePrice ?? meta.price) || 0;
     const line = unit * Number(e.qty || 0);
     subtotal += line;
 

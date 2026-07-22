@@ -126,9 +126,15 @@
       const images = {};
       (p.variants || []).forEach(v => { images[v.color] = v.thumbnails?.[0] || fallbackImg; });
 
+      const originalPrice = Number(p.price) || 0;
+      // 後端已回傳 salePrice / onSale（server/utils/pricing.js）；
+      // 舊資料若無 salePrice 則回退為原價，確保相容。
+      const salePrice = (typeof p.salePrice === 'number') ? p.salePrice : originalPrice;
       map[p.id] = {
         title: p.title,
-        price: Number(p.price) || 0,
+        price: originalPrice,        // 原價
+        salePrice,                   // 折後價（無折扣時等於原價）
+        onSale: !!p.onSale && salePrice < originalPrice,
         image: fallbackImg,
         images,
         currency: 'TWD',

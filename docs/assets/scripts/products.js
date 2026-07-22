@@ -2,9 +2,14 @@ function renderProductsHTML(products = []) {
   return products.map(p => {
     const v = p.variants?.[0];
     const img = v?.thumbnails?.[0] || 'assets/images/placeholder.jpg';
-    const price = (typeof p.price === 'number' && p.price > 0)
-      ? `NT$${p.price.toLocaleString()}`
-      : '—';
+    const fmt = (n) => `NT$${Number(n).toLocaleString()}`;
+    const hasPrice = typeof p.price === 'number' && p.price > 0;
+    const onSale = hasPrice && p.onSale && typeof p.salePrice === 'number' && p.salePrice < p.price;
+    const price = !hasPrice
+      ? '—'
+      : (onSale
+        ? `<span class="price-original">${fmt(p.price)}</span> ${fmt(p.salePrice)}`
+        : fmt(p.price));
     return `
       <div class="product-card">
         <div class="product-container">
