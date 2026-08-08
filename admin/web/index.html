@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EAL 管理後台</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div id="envBanner" class="env-banner">載入中…</div>
+
+  <div class="layout">
+    <!-- 左側：商品列表 -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <input id="search" type="search" placeholder="搜尋商品標題…" autocomplete="off" />
+        <button id="btnNew" class="btn btn-primary">＋ 新增商品</button>
+      </div>
+      <ul id="productList" class="product-list"></ul>
+    </aside>
+
+    <!-- 右側：編輯區 -->
+    <main id="editor" class="editor">
+      <div class="empty-state">← 從左側選一個商品，或按「新增商品」</div>
+    </main>
+  </div>
+
+  <!-- 全域提示 -->
+  <div id="toast" class="toast"></div>
+
+  <!-- 樣板：新增商品表單 -->
+  <template id="tplNewProduct">
+    <div class="panel">
+      <h2>新增商品</h2>
+      <div class="field"><label>標題 Title *</label><input data-f="title" type="text" /></div>
+      <div class="row">
+        <div class="field"><label>價格 Price</label><input data-f="price" type="number" value="0" /></div>
+        <div class="field"><label>年份 Year</label><input data-f="year" type="number" /></div>
+        <div class="field"><label>季別 Season</label>
+          <select data-f="season"><option value="SS">SS</option><option value="FW">FW</option><option value="AW">AW</option></select>
+        </div>
+      </div>
+      <div class="field"><label>描述 Description（可含 HTML）</label><textarea data-f="description" rows="5"></textarea></div>
+      <label class="check"><input data-f="isArchived" type="checkbox" /> 加入 Archive Sale（封存）</label>
+      <p class="hint">建立後即可在編輯畫面新增顏色（variant）與上傳圖片。</p>
+      <div class="actions">
+        <button class="btn btn-primary" data-act="create">建立商品</button>
+        <button class="btn" data-act="cancel">取消</button>
+      </div>
+    </div>
+  </template>
+</body>
+</html>
