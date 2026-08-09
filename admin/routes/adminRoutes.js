@@ -92,6 +92,7 @@ router.post('/products', wrap(async (req, res) => {
       season: b.season,
       description: b.description != null ? String(b.description) : null,
       isArchived: !!b.isArchived,
+      isWomens: !!b.isWomens,
       variants: { create: variantsToCreate },
     },
     include: PRODUCT_INCLUDE,
@@ -112,6 +113,7 @@ router.put('/products/:id', wrap(async (req, res) => {
   }
   if (b.description !== undefined) data.description = b.description != null ? String(b.description) : null;
   if (b.isArchived != null) data.isArchived = !!b.isArchived;
+  if (b.isWomens != null) data.isWomens = !!b.isWomens;
 
   const updated = await prisma.product.update({ where: { id: req.params.id }, data, include: PRODUCT_INCLUDE });
   res.json({ ok: true, item: sortProduct(updated) });

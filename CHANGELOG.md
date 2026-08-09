@@ -4,6 +4,84 @@
 
 ---
 
+## 2026-08-08 — 新增「女裝」頂層分類
+
+### 變更類型
+feat + DB migration（schema 變動）
+
+### 變更原因
+需要在 SHOP 選單新增一個與季節（25SS/25FW）同層級的分類「女裝」，用來聚合女裝商品。
+
+### 設計決策
+- **與季節並存**：女裝商品仍保留自身 season/year，會同時出現在其季節分頁與「女裝」分頁（不像 Archive Sale 會從季節分頁排除）。因此季節查詢維持不變，不加任何 isWomens 過濾。
+- **用布林旗標 isWomens**（比照 isArchived）：因目前只規劃「女裝」單一分類，採最單純做法；若日後要多個分類，再改為通用 category 欄位。
+- **選單位置**：放在 SHOP 下拉、與動態季節項目並列（menu.js 動態插入），符合「與 25SS 同層級」。非最上層項目（有別於 Archive Sale）。
+- 女裝分頁排除已封存商品（`isWomens: true, isArchived: false`），使封存品只留在 Archive Sale。
+
+### 變更檔案
+
+| 檔案 | 變更內容 |
+|---|---|
+| `prisma/schema.prisma` | `Product` 新增 `isWomens Boolean @default(false)` 與 `@@index([isWomens])` |
+| `prisma/migrations/20260808000000_add_product_is_womens/migration.sql` | 新增 `ADD COLUMN isWomens` 與索引 |
+| `server/models/productModel.js` | `listProducts` 加 `womens` 分支（查 `isWomens:true, isArchived:false`）；季節查詢不變 |
+| `server/controllers/productController.js` | `list` 讀取 `?womens=1|true` 並轉布林傳入 model |
+| `docs/assets/scripts/menu.js` | `renderShopItems` 於季節項目後插入「女裝」連結（`#products?womens=1&label=女裝`） |
+| `docs/assets/scripts/products.js` | `parseHashRoute` 解析 `womens`；`renderProductsByRoute` 加 womens 分支 |
+| `docs/assets/scripts/productsService.js` | `fetchProductsBy` 支援 `womens`，cache key 分離 |
+| `admin/routes/adminRoutes.js` | 建立/更新商品支援 `isWomens` |
+| `admin/web/index.html`、`admin/web/app.js` | 商品表單（新增與編輯）加「女裝」勾選框 |
+
+### 連動影響
+- **需執行 migration**：部署前須跑 `npx prisma migrate deploy`（或 dev）套用 `isWomens` 欄位，並 `prisma generate` 重生 client。順序務必為「先 migrate，後用更新後的後端/後台」。
+- 現有資料安全：新欄位 `@default(false)`，既有商品皆為非女裝。
+- 前端為靜態部署，需重新部署 `docs/`。
+- 後端（正式 EC2 / 測試 Vercel）需部署更新後的 `server/`。
+
+### 回滾方式
+移除 `isWomens` 相關程式與選單項目；DB 欄位可保留（不影響）或以反向 migration 移除 `ADD COLUMN`／索引。
+
+---
+
+## 2026-08-08 — 新增本機商品管理後台（admin/）
+
+### 變更類型
+feat（新增獨立模組，不影響現有 server / docs / prisma）
+
+### 變更原因
+商品數量增加，手動編輯 `scripts/products-bulk.js` + JSON 再跑 seed 腳本的流程成本過高，且調整圖片順序（`Variant.thumbnails`）不直覺。需要一個 GUI 來批次上架與拖拉排序圖片。
+
+### 設計決策（路線 A：只在本機執行，連遠端 DB/S3）
+- **不另開 repo，放在同一專案的 `admin/` 模組**：可直接重用 Prisma schema 與 S3 慣例，避免 schema/env 兩地同步。
+  - 優點：零重複、維護單一真相；缺點：repo 體積略增。
+- **前端純 HTML/JS + CDN（SortableJS 拖拉排序），不用 React/Vite**：零 build step，符合無 Docker/CICD 環境。
+  - 缺點：功能長大後維護性不如框架。
+- **圖片上傳改用 base64 → 後端 lib-storage 直傳 S3，不裝 multer**：因無法從遠端 session 幫使用者本機安裝 npm 套件；且本機使用無 serverless body 限制。
+  - 優點：零新增依賴；缺點：傳輸量多約 33%（本機 localhost 無感）。若日後改公開部署（路線 B）需改成 presigned URL。
+- **預設連 staging**：`ADMIN_ENV` 預設 staging，避免測試誤動正式資料；啟動橫幅明確標示環境。
+
+### 變更檔案
+
+| 檔案 | 變更內容 |
+|---|---|
+| `admin/server.js` | 新增。獨立 Express server，依 `ADMIN_ENV` 載入對應 `.env`，預設 staging，port 預設 4300 |
+| `admin/lib/prisma.js` | 新增。後台專用 Prisma client 單例 |
+| `admin/lib/s3.js` | 新增。S3 上傳/刪除 helper，沿用既有 env 與 key 命名慣例 |
+| `admin/routes/adminRoutes.js` | 新增。商品/variant/size CRUD、圖片上傳、`thumbnails` 重新排序 API |
+| `admin/web/index.html`、`app.js`、`style.css` | 新增。後台介面（商品列表、編輯、拖拉排序圖片） |
+| `admin/README.md` | 新增。啟動與環境說明 |
+| `package.json` | 新增 script `admin` 與 `admin:prod`；**未變動 dependencies** |
+
+### 連動影響
+- 不影響正式站：`admin/` 不會被 Vercel 部署，前台仍走 `docs/`（GitHub Pages）與 `server/`（Vercel）。
+- 無 DB schema 變動、無 migration。
+- 刪除商品/顏色/圖片會連同 S3 檔案刪除且不可復原，建議先在 staging 操作。
+
+### 回滾方式
+移除 `admin/` 目錄並還原 `package.json` 的 scripts 即可，無資料庫或其他模組副作用。
+
+---
+
 ## 2026-06-24 — 新增「Archive Sale」獨立類別
 
 ### 變更類型

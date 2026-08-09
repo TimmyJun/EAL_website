@@ -3,9 +3,10 @@ const productModel = require('../models/productModel');
 // GET /api/products?year=2025&type=ss  或  /api/products?archived=1
 exports.list = async (req, res) => {
   try {
-    const { year, type, archived } = req.query;
+    const { year, type, archived, womens } = req.query;
     const isArchived = archived === '1' || archived === 'true';
-    const items = await productModel.listProducts({ year, type, archived: isArchived });
+    const isWomens = womens === '1' || womens === 'true';
+    const items = await productModel.listProducts({ year, type, archived: isArchived, womens: isWomens });
     res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
     res.json(items);
   } catch (e) {

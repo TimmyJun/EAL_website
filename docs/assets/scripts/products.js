@@ -34,6 +34,7 @@ function parseHashRoute() {
     year: sp.get('year') ? Number(sp.get('year')) : undefined,
     type: sp.get('type') ? String(sp.get('type')).toLowerCase() : undefined,
     archived: sp.get('archived') === '1' || sp.get('archived') === 'true',
+    womens: sp.get('womens') === '1' || sp.get('womens') === 'true',
     label: sp.get('label') ? String(sp.get('label')) : '',
   };
 }
@@ -44,7 +45,7 @@ async function renderProductsByRoute() {
   const heading = document.querySelector('.products-container .collection-name');
   if (!listEl) return;
 
-  const { route, year, type, archived, label } = parseHashRoute();
+  const { route, year, type, archived, womens, label } = parseHashRoute();
   if (route !== 'products') return;
 
   listEl.innerHTML = '載入中…';
@@ -53,6 +54,12 @@ async function renderProductsByRoute() {
     if (archived) {
       if (heading) heading.textContent = label ? `E’TREALOUEST ${label}` : 'E’TREALOUEST Archive Sale';
       const items = await window.productService.fetchProductsBy({ archived: true });
+      listEl.innerHTML = Array.isArray(items) && items.length
+        ? renderProductsHTML(items)
+        : '<p>目前沒有商品</p>';
+    } else if (womens) {
+      if (heading) heading.textContent = label ? `E’TREALOUEST ${label}` : 'E’TREALOUEST 女裝';
+      const items = await window.productService.fetchProductsBy({ womens: true });
       listEl.innerHTML = Array.isArray(items) && items.length
         ? renderProductsHTML(items)
         : '<p>目前沒有商品</p>';

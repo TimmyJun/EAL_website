@@ -78,6 +78,15 @@ function renderShopItems(tags = []) {
     li.appendChild(a);
     shopItems.appendChild(li);
   }
+
+  // 女裝：固定分類，與季節同層並列於 SHOP 選單下
+  const womensLi = document.createElement('li');
+  womensLi.className = 'shop-item';
+  const womensA = document.createElement('a');
+  womensA.href = `#products?womens=1&label=${encodeURIComponent('女裝')}`;
+  womensA.textContent = '女裝';
+  womensLi.appendChild(womensA);
+  shopItems.appendChild(womensLi);
 }
 
 async function initShopMenuItems() {

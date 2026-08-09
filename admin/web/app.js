@@ -106,6 +106,12 @@ function renderEditor() {
   ]);
   f.isArchived = arch.querySelector('input');
   info.append(arch);
+  const womens = el('label', { class: 'check' }, [
+    Object.assign(document.createElement('input'), { type: 'checkbox', checked: p.isWomens }),
+    document.createTextNode(' 女裝'),
+  ]);
+  f.isWomens = womens.querySelector('input');
+  info.append(womens);
   info.append(el('div', { class: 'actions' }, [
     el('button', { class: 'btn btn-primary', text: '儲存商品資料', onclick: () => saveProduct(f) }),
     el('button', { class: 'btn btn-danger', text: '刪除商品', onclick: () => deleteProduct(p.id) }),
@@ -230,6 +236,7 @@ async function saveProduct(f) {
     const body = {
       title: f.title.value, price: f.price.value, year: f.year.value,
       season: f.season.value, description: f.description.value, isArchived: f.isArchived.checked,
+      isWomens: f.isWomens.checked,
     };
     await api('PUT', `/products/${CURRENT.id}`, body);
     toast('已儲存商品資料');
@@ -313,6 +320,7 @@ async function createProduct(panel) {
   const body = {
     title: g('title').value.trim(), price: g('price').value, year: g('year').value,
     season: g('season').value, description: g('description').value, isArchived: g('isArchived').checked,
+    isWomens: g('isWomens').checked,
     variants: [],
   };
   if (!body.title) return toast('請填標題', true);

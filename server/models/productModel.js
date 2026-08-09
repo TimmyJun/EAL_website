@@ -34,12 +34,22 @@ function sortSizesOnProducts(products) {
   return products.map(sortSizesOnProduct);
 }
 
-async function listProducts({ year, type, archived } = {}) {
+async function listProducts({ year, type, archived, womens } = {}) {
   // Archive Sale：獨立類別，忽略 year/season，只看 isArchived
   if (archived) {
     const rows = await prisma.product.findMany({
       where: { isArchived: true },
       orderBy: { createdAt: 'desc' },
+      include: { variants: { include: { sizes: true } } },
+    });
+    return sortSizesOnProducts(rows);
+  }
+
+  // 女裝：獨立頂層分類（與季節並存，但不含已封存商品）
+  if (womens) {
+    const rows = await prisma.product.findMany({
+      where: { isWomens: true, isArchived: false },
+      orderBy: { createdAt: "desc" },
       include: { variants: { include: { sizes: true } } },
     });
     return sortSizesOnProducts(rows);

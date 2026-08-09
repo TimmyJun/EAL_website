@@ -17,10 +17,12 @@ model Product {
   season      Season
   year        Int
   isArchived  Boolean   @default(false)
+  isWomens    Boolean   @default(false)
   variants    Variant[]
 
   @@index([year, season])
   @@index([isArchived])
+  @@index([isWomens])
 }
 
 model Variant {
