@@ -112,6 +112,13 @@ function renderEditor() {
   ]);
   f.isWomens = womens.querySelector('input');
   info.append(womens);
+  // 勾「女裝」時，季度/年份不適用 → 淡化並停用（值仍會送出以符合 NOT NULL）
+  const toggleSeasonForWomens = () => {
+    const on = f.isWomens.checked;
+    [f.season, f.year].forEach(inp => { if (inp) { inp.disabled = on; inp.style.opacity = on ? '0.4' : ''; } });
+  };
+  f.isWomens.addEventListener('change', toggleSeasonForWomens);
+  toggleSeasonForWomens();
   info.append(el('div', { class: 'actions' }, [
     el('button', { class: 'btn btn-primary', text: '儲存商品資料', onclick: () => saveProduct(f) }),
     el('button', { class: 'btn btn-danger', text: '刪除商品', onclick: () => deleteProduct(p.id) }),
@@ -309,6 +316,14 @@ function openNewProduct() {
   const node = document.getElementById('tplNewProduct').content.cloneNode(true);
   const panel = node.querySelector('.panel');
   panel.querySelector('[data-f="year"]').value = new Date().getFullYear();
+  // 勾「女裝」時淡化季度/年份
+  const wchk = panel.querySelector('[data-f="isWomens"]');
+  const toggleNewSeason = () => {
+    const on = wchk.checked;
+    [panel.querySelector('[data-f="season"]'), panel.querySelector('[data-f="year"]')].forEach(inp => { if (inp) { inp.disabled = on; inp.style.opacity = on ? '0.4' : ''; } });
+  };
+  wchk.addEventListener('change', toggleNewSeason);
+  toggleNewSeason();
   panel.querySelector('[data-act="create"]').addEventListener('click', () => createProduct(panel));
   panel.querySelector('[data-act="cancel"]').addEventListener('click', () => {
     root.innerHTML = '<div class="empty-state">← 從左側選一個商品</div>';

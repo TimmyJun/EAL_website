@@ -13,7 +13,7 @@ feat + DB migration（schema 變動）
 需要在 SHOP 選單新增一個與季節（25SS/25FW）同層級的分類「女裝」，用來聚合女裝商品。
 
 ### 設計決策
-- **與季節並存**：女裝商品仍保留自身 season/year，會同時出現在其季節分頁與「女裝」分頁（不像 Archive Sale 會從季節分頁排除）。因此季節查詢維持不變，不加任何 isWomens 過濾。
+- **與季節互斥**：女裝商品只出現在「女裝」分頁，不出現在季節分頁（比照 Archive Sale）。季節查詢與 season-tags 均加 `isWomens: false` 排除女裝；女裝商品的 season/year 仍為必填但不被使用（僅存 NOT NULL 值）。
 - **用布林旗標 isWomens**（比照 isArchived）：因目前只規劃「女裝」單一分類，採最單純做法；若日後要多個分類，再改為通用 category 欄位。
 - **選單位置**：放在 SHOP 下拉、與動態季節項目並列（menu.js 動態插入），符合「與 25SS 同層級」。非最上層項目（有別於 Archive Sale）。
 - 女裝分頁排除已封存商品（`isWomens: true, isArchived: false`），使封存品只留在 Archive Sale。
@@ -24,13 +24,13 @@ feat + DB migration（schema 變動）
 |---|---|
 | `prisma/schema.prisma` | `Product` 新增 `isWomens Boolean @default(false)` 與 `@@index([isWomens])` |
 | `prisma/migrations/20260808000000_add_product_is_womens/migration.sql` | 新增 `ADD COLUMN isWomens` 與索引 |
-| `server/models/productModel.js` | `listProducts` 加 `womens` 分支（查 `isWomens:true, isArchived:false`）；季節查詢不變 |
+| `server/models/productModel.js` | `listProducts` 加 `womens` 分支；季節查詢與 `getSeasonTags` 加 `isWomens:false` 排除女裝（女裝與季節互斥）|
 | `server/controllers/productController.js` | `list` 讀取 `?womens=1|true` 並轉布林傳入 model |
 | `docs/assets/scripts/menu.js` | `renderShopItems` 於季節項目後插入「女裝」連結（`#products?womens=1&label=女裝`） |
 | `docs/assets/scripts/products.js` | `parseHashRoute` 解析 `womens`；`renderProductsByRoute` 加 womens 分支 |
 | `docs/assets/scripts/productsService.js` | `fetchProductsBy` 支援 `womens`，cache key 分離 |
 | `admin/routes/adminRoutes.js` | 建立/更新商品支援 `isWomens` |
-| `admin/web/index.html`、`admin/web/app.js` | 商品表單（新增與編輯）加「女裝」勾選框 |
+| `admin/web/index.html`、`admin/web/app.js` | 商品表單（新增與編輯）加「女裝」勾選框；勾女裝時淡化季度/年份欄位 |
 
 ### 連動影響
 - **需執行 migration**：部署前須跑 `npx prisma migrate deploy`（或 dev）套用 `isWomens` 欄位，並 `prisma generate` 重生 client。順序務必為「先 migrate，後用更新後的後端/後台」。
